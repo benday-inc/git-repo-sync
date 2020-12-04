@@ -35,10 +35,38 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             string baseDir = GetArgumentValue(Constants.ArgumentNameFromPath);
 
+            var codeDirArgValue = GetArgumentValue(Constants.ArgumentNameCodeFolderPath);
+            var category = GetArgumentValue(Constants.ArgumentNameCategory, "default category");
+
+            string baseDirFormattedForConfigFile = baseDir;
+
+            if (codeDirArgValue != null)
+            {
+                if (codeDirArgValue.StartsWith("~") == true)
+                {
+                    codeDirArgValue = codeDirArgValue.Replace("~", Environment.GetEnvironmentVariable("HOME"));
+                }
+
+                codeDirArgValue = Path.GetFullPath(codeDirArgValue);
+
+                Console.WriteLine($"INFO: Replacing code folder '{codeDirArgValue}' with variable '{Constants.CodeDirVariable}'.");
+
+                if (Directory.Exists(codeDirArgValue) == false)
+                {
+                    throw new DirectoryNotFoundException("Value for code folder does not exist.");
+                }
+
+                baseDirFormattedForConfigFile = baseDir.Replace(codeDirArgValue, Constants.CodeDirVariable);
+            }
+            else
+            {
+                Console.WriteLine("INFO: Not replacing code folder with variable.");
+            }
+
             StringBuilder builder = new StringBuilder();
 
             // header line
-            builder.AppendLine("description,parent folder,giturl");
+            builder.AppendLine("category,description,parent folder,giturl");
 
             if (Directory.Exists(baseDir) == true)
             {
@@ -53,7 +81,7 @@ namespace Benday.GitRepoSync.ConsoleUi
                         var repoName = GetGitRepoName(remote).Replace("-", " ");
 
                         builder.AppendLine(
-                            $"{repoName},{baseDir},{remote}");
+                            $"{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
                     }
                 }
 

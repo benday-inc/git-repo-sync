@@ -222,9 +222,16 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-        protected string GetArgumentValue(string key)
+        protected string GetArgumentValue(string key, string defaultValue = null)
         {
-            return Arguments[key];
+            if (ArgNameExists(key) == false)
+            {
+                return defaultValue;
+            }
+            else
+            {
+                return Arguments[key];
+            }            
         }
 
         public abstract void Run();
