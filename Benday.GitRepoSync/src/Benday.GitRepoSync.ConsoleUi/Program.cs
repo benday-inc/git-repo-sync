@@ -31,9 +31,9 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             var commandName = args[0];
 
-            if (commandName == Constants.CommandArgumentNameExportGitRepos)
+            if (commandName == Constants.CommandArgumentNameExportCloneGitRepos)
             {
-                new ExportGitReposCommand(args).Run();
+                new ExportCloneGitReposCommand(args).Run();
             }
             else
             {
@@ -44,7 +44,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         private static void DisplayUsage()
         {
 
-            Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportGitRepos}");
+            Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportCloneGitRepos}");
         }
     }
 }

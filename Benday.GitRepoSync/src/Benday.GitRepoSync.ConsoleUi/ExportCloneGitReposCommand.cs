@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Benday.GitRepoSync.ConsoleUi
 {
-    public class ExportGitReposCommand : CommandBase
+    public class ExportCloneGitReposCommand : CommandBase
     {
-        public ExportGitReposCommand(string[] args) : base(args)
+        public ExportCloneGitReposCommand(string[] args) : base(args)
         {
             
         }
@@ -18,7 +18,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             get
             {
-                return Constants.CommandArgumentNameExportGitRepos;
+                return Constants.CommandArgumentNameExportCloneGitRepos;
             }
         }
 
