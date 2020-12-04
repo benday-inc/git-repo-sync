@@ -6,7 +6,16 @@ namespace Benday.GitRepoSync.ConsoleUi
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if (args.Length == 0)
+            {
+                Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportGitRepos}");
+            }
+            else
+            {
+                new ExportGitReposCommand(args).Run();
+            }
         }
+
+        
     }
 }
