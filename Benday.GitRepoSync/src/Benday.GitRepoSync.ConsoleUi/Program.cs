@@ -39,6 +39,10 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 new ExportReposAsConfigFileCommand(args).Run();
             }
+            else if (commandName == Constants.CommandArgumentNameUpdateAllRepos)
+            {
+                new UpdateAllReposCommand(args).Run();
+            }
             else
             {
                 DisplayUsage();

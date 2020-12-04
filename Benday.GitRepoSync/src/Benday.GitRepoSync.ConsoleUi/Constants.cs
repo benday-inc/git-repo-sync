@@ -4,6 +4,9 @@ namespace Benday.GitRepoSync.ConsoleUi
     {
         public const string CommandArgumentNameExportCloneGitRepos = "export";
         public const string CommandArgumentNameExportReposAsConfigFile = "exportconfig";
+        public const string CommandArgumentNameUpdateAllRepos = "update";
+
+        public const string ArgumentNameConfigFile = "config";
         public const string ArgumentNameFromPath = "frompath";
         public const string ArgumentNameCodeFolderPath = "codefolderpath";
         public const string ArgumentNameCategory = "category";
