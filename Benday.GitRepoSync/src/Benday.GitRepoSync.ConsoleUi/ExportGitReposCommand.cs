@@ -31,7 +31,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             return argumentNames;
         }
 
-        private void ExportGitRepoUrls()
+        public override void Run()
         {
             string baseDir = GetArgumentValue(Constants.ArgumentNameFromPath);
 
@@ -105,9 +105,6 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-        public override void Run()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

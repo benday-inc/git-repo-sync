@@ -8,14 +8,43 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             if (args.Length == 0)
             {
-                Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportGitRepos}");
+                DisplayUsage();
             }
             else
             {
-                new ExportGitReposCommand(args).Run();
+                try
+                {
+                    RunCommand(args);
+                }
+                catch (MissingArgumentException)
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }                
             }
         }
 
-        
+        private static void RunCommand(string[] args)
+        {
+            var commandName = args[0];
+
+            if (commandName == Constants.CommandArgumentNameExportGitRepos)
+            {
+                new ExportGitReposCommand(args).Run();
+            }
+            else
+            {
+                DisplayUsage();
+            }
+        }
+
+        private static void DisplayUsage()
+        {
+
+            Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportGitRepos}");
+        }
     }
 }
