@@ -84,16 +84,78 @@ namespace Benday.GitRepoSync.ConsoleUi
 
             List<RepositoryInfo> repos = GetRepositories(configFilename);
 
+            int totalCount = repos.Count;
+            int currentNumber = 0;
+
             foreach (var repo in repos)
             {
-                Console.WriteLine($"**********");
-                Console.WriteLine($"Category     : {repo.Category}");
-                Console.WriteLine($"Name         : {repo.RepositoryName}");
-                Console.WriteLine($"Desc         : {repo.Description}");
-                Console.WriteLine($"Parent folder: {repo.ParentFolder}");
-                Console.WriteLine($"To folder    : {ReplaceCodeVariable(repo.ParentFolder, codeFolderPath)}");
-                Console.WriteLine($"Git Url      : {repo.GitUrl}");
-            }            
+                // DebugRepoInfo(codeFolderPath, repo);
+
+                UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
+                currentNumber++;
+            }
+        }
+
+        private void UpdateRepo(RepositoryInfo repo, string codeFolderPath,
+            int currentNumber, int totalCount)
+        {
+            Console.WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
+
+            var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
+
+            var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
+
+            if (Directory.Exists(repoFolder) == true)
+            {
+                SyncRepo(repo, repoFolder);
+            }
+            else
+            {
+                CloneRepo(repo, parentFolder);
+            }
+        }
+
+        private void CloneRepo(RepositoryInfo repo, string parentFolder)
+        {
+            Console.WriteLine($"Cloning {repo.Description}...");
+
+            if (Directory.Exists(parentFolder) == false)
+            {
+                Directory.CreateDirectory(parentFolder);
+            }
+
+            var cloneCommand = new ProcessStartInfo("git",
+                $"clone {repo.GitUrl}");
+            cloneCommand.WorkingDirectory = parentFolder;
+
+            Process.Start(cloneCommand);
+        }
+
+        private void SyncRepo(RepositoryInfo repo, string repoFolder)
+        {
+            Console.WriteLine($"Getting changes for {repo.Description}...");
+
+            var fetchCommand = new ProcessStartInfo("git",
+                $"fetch");
+            fetchCommand.WorkingDirectory = repoFolder;
+
+            var pullCommand = new ProcessStartInfo("git",
+                $"pull");
+            pullCommand.WorkingDirectory = repoFolder;
+
+            Process.Start(fetchCommand);
+            Process.Start(pullCommand);
+        }
+
+        private void DebugRepoInfo(string codeFolderPath, RepositoryInfo repo)
+        {
+            Console.WriteLine($"**********");
+            Console.WriteLine($"Category     : {repo.Category}");
+            Console.WriteLine($"Name         : {repo.RepositoryName}");
+            Console.WriteLine($"Desc         : {repo.Description}");
+            Console.WriteLine($"Parent folder: {repo.ParentFolder}");
+            Console.WriteLine($"To folder    : {ReplaceCodeVariable(repo.ParentFolder, codeFolderPath)}");
+            Console.WriteLine($"Git Url      : {repo.GitUrl}");
         }
 
         private string ReplaceCodeVariable(string parentFolder, string codeFolderPath)
