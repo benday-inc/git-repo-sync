@@ -35,6 +35,10 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 new ExportCloneGitReposCommand(args).Run();
             }
+            else if (commandName == Constants.CommandArgumentNameExportReposAsConfigFile)
+            {
+                new ExportReposAsConfigFileCommand(args).Run();
+            }
             else
             {
                 DisplayUsage();
