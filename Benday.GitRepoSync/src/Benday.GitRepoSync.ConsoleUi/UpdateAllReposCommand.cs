@@ -117,7 +117,7 @@ namespace Benday.GitRepoSync.ConsoleUi
 
         private void CloneRepo(RepositoryInfo repo, string parentFolder)
         {
-            Console.WriteLine($"Cloning {repo.Description}...");
+            Console.WriteLine($"Cloning {repo.Description} into {parentFolder}...");
 
             if (Directory.Exists(parentFolder) == false)
             {
@@ -128,7 +128,7 @@ namespace Benday.GitRepoSync.ConsoleUi
                 $"clone {repo.GitUrl}");
             cloneCommand.WorkingDirectory = parentFolder;
 
-            Process.Start(cloneCommand);
+            Process.Start(cloneCommand).WaitForExit();
         }
 
         private void SyncRepo(RepositoryInfo repo, string repoFolder)
@@ -143,8 +143,8 @@ namespace Benday.GitRepoSync.ConsoleUi
                 $"pull");
             pullCommand.WorkingDirectory = repoFolder;
 
-            Process.Start(fetchCommand);
-            Process.Start(pullCommand);
+            Process.Start(fetchCommand).WaitForExit(); ;
+            Process.Start(pullCommand).WaitForExit(); ;
         }
 
         private void DebugRepoInfo(string codeFolderPath, RepositoryInfo repo)
