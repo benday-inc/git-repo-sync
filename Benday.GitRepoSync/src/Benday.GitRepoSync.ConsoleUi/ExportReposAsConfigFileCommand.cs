@@ -22,6 +22,16 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
+        protected override void DisplayUsage(StringBuilder builder)
+        {
+            Console.WriteLine($"Command name: {CommandArgumentName}");
+            Console.WriteLine($"Arguments:");
+            Console.WriteLine($"\t{Constants.ArgumentNameFromPath}");
+            Console.WriteLine($"\t{Constants.ArgumentNameCategory} (optional)");
+            Console.WriteLine($"\t{Constants.ArgumentNameCodeFolderPath} (optional)");
+
+        }
+
         protected override List<string> GetRequiredArguments()
         {
             var argumentNames = new List<string>();
