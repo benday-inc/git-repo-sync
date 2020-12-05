@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Benday.GitRepoSync.ConsoleUi
 {
@@ -78,9 +77,6 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-        private List<Task> _CloneTasks = new List<Task>();
-        private List<Task> _SyncTasks = new List<Task>();
-
         public override void Run()
         {
             var configFilename = GetPath(GetArgumentValue(Constants.ArgumentNameConfigFile));
@@ -95,53 +91,8 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 // DebugRepoInfo(codeFolderPath, repo);
 
-                bool exists = DoesRepoExist(repo, codeFolderPath);
-
-                if (exists == true)
-                {
-                    var temp = Task.Run(() => UpdateRepo(
-                            repo, codeFolderPath,
-                            currentNumber, totalCount));
-
-                    _SyncTasks.Add(temp);
-                }
-                else
-                {
-                    var temp = new Task(() => UpdateRepo(
-                            repo, codeFolderPath,
-                            currentNumber, totalCount));
-
-                    _CloneTasks.Add(temp);
-                }
-
+                UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
                 currentNumber++;
-            }
-
-            Task.WaitAll(_SyncTasks.ToArray());
-
-            foreach (var cloneTask in _CloneTasks)
-            {
-                cloneTask.RunSynchronously();
-            }
-
-            DisplayTaskErrors();
-        }
-
-        private Dictionary<RepositoryInfo, Exception> _Exceptions = new Dictionary<RepositoryInfo, Exception>();
-
-        private bool DoesRepoExist(RepositoryInfo repo, string codeFolderPath)
-        {
-            var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
-
-            var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
-
-            if (Directory.Exists(repoFolder) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 
@@ -150,44 +101,18 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             Console.WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
 
-            try
+            var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
+
+            var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
+
+            if (Directory.Exists(repoFolder) == true)
             {
-                var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
-
-                var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
-
-                if (DoesRepoExist(repo, codeFolderPath) == true)
-                {
-                    SyncRepo(repo, repoFolder);
-                }
-                else
-                {
-                    CloneRepo(repo, parentFolder);
-                }
+                SyncRepo(repo, repoFolder);
             }
-            catch (Exception ex)
+            else
             {
-                _Exceptions.Add(repo, ex);
-                Console.WriteLine($"Error.  {ex}");
-                throw;
+                CloneRepo(repo, parentFolder);
             }
-        }
-
-
-        private void DisplayTaskErrors()
-        {
-            var keys = _Exceptions.Keys;
-
-            foreach (var repo in keys)
-            {
-                DisplayTaskError(repo, _Exceptions[repo]);
-            }
-        }
-
-        private void DisplayTaskError(RepositoryInfo repo, Exception exception)
-        {
-            Console.WriteLine($"Error on {repo.Description}...");
-            Console.WriteLine($"{exception}");
         }
 
         private void CloneRepo(RepositoryInfo repo, string parentFolder)
