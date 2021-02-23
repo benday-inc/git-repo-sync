@@ -28,6 +28,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             Console.WriteLine($"Arguments:");
             Console.WriteLine($"\t{Constants.ArgumentNameConfigFile}");
             Console.WriteLine($"\t{Constants.ArgumentNameCodeFolderPath}");
+            Console.WriteLine($"\t[{Constants.ArgumentNameQuickSync}]");
         }
 
         protected override List<string> GetRequiredArguments()
@@ -82,6 +83,13 @@ namespace Benday.GitRepoSync.ConsoleUi
             var configFilename = GetPath(GetArgumentValue(Constants.ArgumentNameConfigFile));
             var codeFolderPath = GetPath(GetArgumentValue(Constants.ArgumentNameCodeFolderPath));
 
+            bool isQuickSyncMode = false;
+
+            if (ArgNameExists(Constants.ArgumentNameQuickSync) == true)
+            {
+                isQuickSyncMode = true;
+            }
+
             List<RepositoryInfo> repos = GetRepositories(configFilename);
 
             int totalCount = repos.Count;
@@ -91,27 +99,35 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 // DebugRepoInfo(codeFolderPath, repo);
 
-                UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
+                UpdateRepo(isQuickSyncMode, repo, codeFolderPath, currentNumber, totalCount);
                 currentNumber++;
             }
         }
 
-        private void UpdateRepo(RepositoryInfo repo, string codeFolderPath,
+        private void UpdateRepo(bool isQuickSyncMode,
+            RepositoryInfo repo, string codeFolderPath,
             int currentNumber, int totalCount)
         {
-            Console.WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
-
-            var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
-
-            var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
-
-            if (Directory.Exists(repoFolder) == true)
+            if (isQuickSyncMode == true && repo.IsQuickSync == false)
             {
-                SyncRepo(repo, repoFolder);
+                Console.WriteLine($"Quick sync is skipping repo {currentNumber} of {totalCount}: {repo.Description}...");
             }
             else
             {
-                CloneRepo(repo, parentFolder);
+                Console.WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
+
+                var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
+
+                var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
+
+                if (Directory.Exists(repoFolder) == true)
+                {
+                    SyncRepo(repo, repoFolder);
+                }
+                else
+                {
+                    CloneRepo(repo, parentFolder);
+                }
             }
         }
 
@@ -194,7 +210,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             var tokens = line.Split(',');
 
-            if (tokens.Length != 4)
+            if (tokens.Length != 5)
             {
                 var message = $"Invalid line.  Not enough tokens.";
                 Console.Error.WriteLine(message);
@@ -206,14 +222,24 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 var temp = new RepositoryInfo();
 
-                temp.Category = tokens[0];
-                temp.Description = tokens[1];
-                temp.ParentFolder = tokens[2];
-                temp.GitUrl = tokens[3];
+                temp.IsQuickSync = ToBoolean(tokens[0]);
+                temp.Category = tokens[1];
+                temp.Description = tokens[2];
+                temp.ParentFolder = tokens[3];
+                temp.GitUrl = tokens[4];
                 temp.RepositoryName = GetGitRepoName(temp.GitUrl);
 
                 return temp;
             }
+        }
+
+        private bool ToBoolean(string fromValue, bool defaultValue = false)
+        {
+            bool returnValue = defaultValue;
+
+            Boolean.TryParse(fromValue, out returnValue);
+
+            return returnValue;
         }
 
         private string GetGitRepoName(string gitRepoUrl)

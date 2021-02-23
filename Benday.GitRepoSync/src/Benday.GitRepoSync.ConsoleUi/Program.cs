@@ -51,8 +51,7 @@ namespace Benday.GitRepoSync.ConsoleUi
 
         private static void DisplayUsage()
         {
-
-            Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameExportCloneGitRepos}");
+            Console.Error.WriteLine($"Missing args. The first arg is the command to run. Options: {Constants.CommandArgumentNameUpdateAllRepos}, {Constants.CommandArgumentNameExportCloneGitRepos}, {Constants.CommandArgumentNameExportReposAsConfigFile}");
         }
     }
 }

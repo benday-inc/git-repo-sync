@@ -76,7 +76,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             StringBuilder builder = new StringBuilder();
 
             // header line
-            builder.AppendLine("category,description,parent folder,giturl");
+            builder.AppendLine("quicksync,category,description,parent folder,giturl");
 
             if (Directory.Exists(baseDir) == true)
             {
@@ -91,7 +91,7 @@ namespace Benday.GitRepoSync.ConsoleUi
                         var repoName = GetGitRepoName(remote).Replace("-", " ");
 
                         builder.AppendLine(
-                            $"{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
+                            $"{false},{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
                     }
                 }
 

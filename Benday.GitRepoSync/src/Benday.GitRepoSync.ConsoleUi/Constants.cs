@@ -9,6 +9,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         public const string ArgumentNameConfigFile = "config";
         public const string ArgumentNameFromPath = "frompath";
         public const string ArgumentNameCodeFolderPath = "codefolderpath";
+        public const string ArgumentNameQuickSync = "quicksync";
         public const string ArgumentNameCategory = "category";
         public const string CodeDirVariable = "%%CodeDir%%";
     }
