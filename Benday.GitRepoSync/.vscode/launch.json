@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Benday.GitRepoSync.WebUi/bin/Debug/net5.0/Benday.GitRepoSync.ConsoleUi.dll",
+            "program": "${workspaceFolder}/src/Benday.GitRepoSync.WebUi/bin/Debug/net6.0/Benday.GitRepoSync.ConsoleUi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Benday.GitRepoSync.ConsoleUi",
             "stopAtEntry": false,
