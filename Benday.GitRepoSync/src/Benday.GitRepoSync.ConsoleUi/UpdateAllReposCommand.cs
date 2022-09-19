@@ -83,10 +83,11 @@ namespace Benday.GitRepoSync.ConsoleUi
             var configFilename = GetPath(GetArgumentValue(Constants.ArgumentNameConfigFile));
             var codeFolderPath = GetPath(GetArgumentValue(Constants.ArgumentNameCodeFolderPath));
             var listCategoriesMode = ArgNameExists(Constants.ArgumentNameListCategories);
+            var hasCategoryFilter = ArgNameExists(Constants.ArgumentNameCategory);
 
             bool isQuickSyncMode = false;
 
-            if (ArgNameExists(Constants.ArgumentNameQuickSync) == true)
+            if (hasCategoryFilter == false && ArgNameExists(Constants.ArgumentNameQuickSync) == true)
             {
                 isQuickSyncMode = true;
             }
@@ -110,6 +111,15 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
             else
             {
+                if (hasCategoryFilter == true)
+                {
+                    var categoryFilter = GetArgumentValue(Constants.ArgumentNameCategory);
+
+                    repos = repos.Where(x => x.Category == categoryFilter).ToList();
+
+                    totalCount = repos.Count;
+                }
+
                 int currentNumber = 0;
 
                 foreach (var repo in repos)
