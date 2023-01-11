@@ -61,11 +61,13 @@ namespace Benday.GitRepoSync.ConsoleUi
 
             if (Directory.Exists(codeFolderPath) == false)
             {
-                var message = $"Code folder directory does not exist - {codeFolderPath}";
+                // var message = $"Code folder directory does not exist - {codeFolderPath}";
 
-                Console.Error.WriteLine(message);
+                Console.WriteLine($"Code folder directory does not exist - {codeFolderPath}. Creating...");
+                // Console.Error.WriteLine(message);
 
-                throw new DirectoryNotFoundException(message);
+                // throw new DirectoryNotFoundException(message);
+                Directory.CreateDirectory(codeFolderPath);
             }
 
             if (File.Exists(configFilename) == false)
