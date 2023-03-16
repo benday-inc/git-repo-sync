@@ -13,5 +13,6 @@ namespace Benday.GitRepoSync.ConsoleUi
         public const string ArgumentNameQuickSync = "quicksync";
         public const string ArgumentNameCategory = "category";
         public const string CodeDirVariable = "%%CodeDir%%";
+        public const string ArgumentNameParallel = "parallel";
     }
 }

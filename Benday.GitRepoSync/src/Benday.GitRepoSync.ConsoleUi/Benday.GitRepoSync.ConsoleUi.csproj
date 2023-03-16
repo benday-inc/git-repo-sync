@@ -4,6 +4,10 @@
     <ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>

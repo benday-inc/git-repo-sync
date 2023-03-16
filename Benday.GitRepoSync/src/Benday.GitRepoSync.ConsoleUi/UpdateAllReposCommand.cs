@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Benday.GitRepoSync.ConsoleUi
 {
@@ -11,7 +12,7 @@ namespace Benday.GitRepoSync.ConsoleUi
     {
         public UpdateAllReposCommand(string[] args) : base(args)
         {
-            
+
         }
 
         protected override string CommandArgumentName
@@ -86,6 +87,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             var codeFolderPath = GetPath(GetArgumentValue(Constants.ArgumentNameCodeFolderPath));
             var listCategoriesMode = ArgNameExists(Constants.ArgumentNameListCategories);
             var hasCategoryFilter = ArgNameExists(Constants.ArgumentNameCategory);
+            var runMultithreaded = ArgNameExists(Constants.ArgumentNameParallel);
 
             bool isQuickSyncMode = false;
 
@@ -124,12 +126,23 @@ namespace Benday.GitRepoSync.ConsoleUi
 
                 int currentNumber = 0;
 
-                foreach (var repo in repos)
+                if (runMultithreaded == true)
                 {
-                    // DebugRepoInfo(codeFolderPath, repo);
+                    Parallel.ForEach(repos, repo =>
+                    {
+                        UpdateRepo(isQuickSyncMode, repo, codeFolderPath, currentNumber, totalCount);
+                        currentNumber++;
+                    });
+                }
+                else
+                {
+                    foreach (var repo in repos)
+                    {
+                        // DebugRepoInfo(codeFolderPath, repo);
 
-                    UpdateRepo(isQuickSyncMode, repo, codeFolderPath, currentNumber, totalCount);
-                    currentNumber++;
+                        UpdateRepo(isQuickSyncMode, repo, codeFolderPath, currentNumber, totalCount);
+                        currentNumber++;
+                    }
                 }
             }
         }
@@ -184,12 +197,12 @@ namespace Benday.GitRepoSync.ConsoleUi
             var fetchCommand = new ProcessStartInfo("git",
                 $"fetch");
             fetchCommand.WorkingDirectory = repoFolder;
-
+            
             var pullCommand = new ProcessStartInfo("git",
                 $"pull");
             pullCommand.WorkingDirectory = repoFolder;
 
-            Process.Start(fetchCommand).WaitForExit(); ;
+            // Process.Start(fetchCommand).WaitForExit(); ;
             Process.Start(pullCommand).WaitForExit(); ;
         }
 
@@ -275,7 +288,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         private string GetGitRepoName(string gitRepoUrl)
         {
             var repoUri = new Uri(gitRepoUrl);
-            
+
             var lastToken = repoUri.Segments.Last();
 
             if (String.IsNullOrWhiteSpace(lastToken) == true)
@@ -292,7 +305,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-            private string GetGitRepoRemote(string dir)
+        private string GetGitRepoRemote(string dir)
         {
             var temp = new ProcessStartInfo();
 
@@ -332,6 +345,6 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-        
+
     }
 }
