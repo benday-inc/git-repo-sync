@@ -37,37 +37,37 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 ## Commands
 | Command Name | Description |
 | --- | --- |
-| [addconfig](#addconfig) | Add or update an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [changeprocess](#changeprocess) | Change the process for a Team Project |
-| [addrefinementprocess](#addrefinementprocess) | Creates backlog refinement process template as described at https://www.benday.com/2022/09/29/streamlining-backlog-refinement-with-azure-devops/ |
-| [creategitrepo](#creategitrepo) | Creates a Git repository in an Azure DevOps Team Project. |
-| [createproject](#createproject) | Create team project |
-| [deleteproject](#deleteproject) | Delete team project |
-| [exportworkitemquery](#exportworkitemquery) | Export work item query results |
-| [forecastdurationforitemcount](#forecastdurationforitemcount) | Use throughput data to forecast likely number of weeks to get given number of items done using Monte Carlo simulation |
-| [forecastitemsinweeks](#forecastitemsinweeks) | Use throughput data to forecast likely number of items done in given number of weeks using Monte Carlo simulation |
-| [forecastworkitem](#forecastworkitem) | Use throughput data to forecast when a work item is likely to be done based on the current backlog priority using Monte Carlo simulation |
-| [getareas](#getareas) | Gets a list of areas in an Azure DevOps Team Project. |
-| [throughputcycletime](#throughputcycletime) | Get cycle time and throughput data for a team project for a date range |
-| [getiterations](#getiterations) | Gets a list of iterations in an Azure DevOps Team Project. |
-| [getproject](#getproject) | Get team project info |
-| [getworkitem](#getworkitem) | Get work item by id |
-| [getfields](#getfields) | Gets a list of work item fields for a work item type in an Azure DevOps Team Project. |
-| [getworkitemstates](#getworkitemstates) | Gets the list of states for a work item type in an Azure DevOps Team Project. |
-| [getworkitemtypes](#getworkitemtypes) | Gets a list of work item types in an Azure DevOps Team Project. |
-| [listconfig](#listconfig) | List an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [listgitrepos](#listgitrepos) | Gets list of Git repositories from an Azure DevOps Team Project. |
-| [listprocesstemplates](#listprocesstemplates) | List process templates |
-| [listprojects](#listprojects) | List team projects |
-| [listworkitemqueries](#listworkitemqueries) | Gets a list of all work item queries in an Azure DevOps Team Project. |
-| [removeconfig](#removeconfig) | Remove an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [runworkitemquery](#runworkitemquery) | Run work item query |
-| [setiteration](#setiteration) | Create iteration including start and end date |
-| [setworkitemstate](#setworkitemstate) | Set the state value on an existing work item |
-| [showworkitemquery](#showworkitemquery) | Show work item query |
-| [createfromgenerator](#createfromgenerator) | Create work items using random data generator |
-| [createfromexcel](#createfromexcel) | Create work items using Excel script |
-## <a name="addconfig"></a> addconfig
+| addconfig | Add or update an Azure DevOps configuration. For example, which server or account plus auth information. |
+| changeprocess | Change the process for a Team Project |
+| addrefinementprocess | Creates backlog refinement process template as described at https://www.benday.com/2022/09/29/streamlining-backlog-refinement-with-azure-devops/ |
+| creategitrepo | Creates a Git repository in an Azure DevOps Team Project. |
+| createproject | Create team project |
+| deleteproject | Delete team project |
+| exportworkitemquery | Export work item query results |
+| forecastdurationforitemcount | Use throughput data to forecast likely number of weeks to get given number of items done using Monte Carlo simulation |
+| forecastitemsinweeks | Use throughput data to forecast likely number of items done in given number of weeks using Monte Carlo simulation |
+| forecastworkitem | Use throughput data to forecast when a work item is likely to be done based on the current backlog priority using Monte Carlo simulation |
+| getareas | Gets a list of areas in an Azure DevOps Team Project. |
+| throughputcycletime | Get cycle time and throughput data for a team project for a date range |
+| getiterations | Gets a list of iterations in an Azure DevOps Team Project. |
+| getproject | Get team project info |
+| getworkitem | Get work item by id |
+| getfields | Gets a list of work item fields for a work item type in an Azure DevOps Team Project. |
+| getworkitemstates | Gets the list of states for a work item type in an Azure DevOps Team Project. |
+| getworkitemtypes | Gets a list of work item types in an Azure DevOps Team Project. |
+| listconfig | List an Azure DevOps configuration. For example, which server or account plus auth information. |
+| listgitrepos | Gets list of Git repositories from an Azure DevOps Team Project. |
+| listprocesstemplates | List process templates |
+| listprojects | List team projects |
+| listworkitemqueries | Gets a list of all work item queries in an Azure DevOps Team Project. |
+| removeconfig | Remove an Azure DevOps configuration. For example, which server or account plus auth information. |
+| runworkitemquery | Run work item query |
+| setiteration | Create iteration including start and end date |
+| setworkitemstate | Set the state value on an existing work item |
+| showworkitemquery | Show work item query |
+| createfromgenerator | Create work items using random data generator |
+| createfromexcel | Create work items using Excel script |
+## addconfig
 **Add or update an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -75,7 +75,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Name of the configuration |
 | pat | Required | String | PAT for this collection |
 | url | Required | String | URL for this collection (example: https://dev.azure.com/accountname) |
-## <a name="changeprocess"></a> changeprocess
+## changeprocess
 **Change the process for a Team Project**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -84,14 +84,14 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name |
 | processname | Required | String | New process name |
-## <a name="addrefinementprocess"></a> addrefinementprocess
+## addrefinementprocess
 **Creates backlog refinement process template as described at https://www.benday.com/2022/09/29/streamlining-backlog-refinement-with-azure-devops/**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
-## <a name="creategitrepo"></a> creategitrepo
+## creategitrepo
 **Creates a Git repository in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -100,7 +100,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the git repositories |
 | reponame | Required | String | Name of the new git repository |
-## <a name="createproject"></a> createproject
+## createproject
 **List team projects**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -109,7 +109,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name |
 | processname | Required | String | Process template name |
-## <a name="deleteproject"></a> deleteproject
+## deleteproject
 **Delete team project**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -118,7 +118,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name to delete |
 | confirm | Optional | Boolean | Confirm delete |
-## <a name="exportworkitemquery"></a> exportworkitemquery
+## exportworkitemquery
 **Export work item query results**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -128,7 +128,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | teamproject | Required | String | Team project name to delete |
 | queryname | Required | String | Work item query name |
 | exporttopath | Required | String | Export to path |
-## <a name="forecastdurationforitemcount"></a> forecastdurationforitemcount
+## forecastdurationforitemcount
 **Use throughput data to forecast likely number of weeks to get given number of items done using Monte Carlo simulation**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -138,7 +138,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | numberofdays | Required | Int32 | Number of days of history to compute |
 | teamproject | Required | String | Team project name |
 | forecastitemcount | Required | Int32 | Number of items to forecast duration for |
-## <a name="forecastitemsinweeks"></a> forecastitemsinweeks
+## forecastitemsinweeks
 **Use throughput data to forecast likely number of items done in given number of weeks using Monte Carlo simulation**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -148,7 +148,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | numberofdays | Required | Int32 | Number of days of history to compute |
 | teamproject | Required | String | Team project name |
 | forecastweeks | Required | Int32 | Number of weeks into the future to forecast |
-## <a name="forecastworkitem"></a> forecastworkitem
+## forecastworkitem
 **Use throughput data to forecast when a work item is likely to be done based on the current backlog priority using Monte Carlo simulation**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -157,7 +157,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | numberofdays | Required | Int32 | Number of days of history to compute |
 | id | Required | Int32 | Id of the work item to forecast |
-## <a name="getareas"></a> getareas
+## getareas
 **Gets a list of areas in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -166,7 +166,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the iterations |
 | verbose | Optional | Boolean | Verbose output |
-## <a name="throughputcycletime"></a> throughputcycletime
+## throughputcycletime
 **Get cycle time and throughput data for a team project for a date range**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -175,7 +175,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | numberofdays | Required | Int32 | Number of days of history to compute |
 | teamproject | Required | String | Team project name |
-## <a name="getiterations"></a> getiterations
+## getiterations
 **Gets a list of iterations in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -184,7 +184,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the iterations |
 | verbose | Optional | Boolean | Verbose output |
-## <a name="getproject"></a> getproject
+## getproject
 **Get team project info**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -192,7 +192,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name |
-## <a name="getworkitem"></a> getworkitem
+## getworkitem
 **Get work item by id**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -200,7 +200,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
 | id | Required | Int32 | Work item id |
-## <a name="getfields"></a> getfields
+## getfields
 **Gets a list of work item fields for a work item type in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -209,7 +209,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the work item type |
 | workitemtypename | Required | String | Name of the work item type |
-## <a name="getworkitemstates"></a> getworkitemstates
+## getworkitemstates
 **Gets the list of states for a work item type in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -218,7 +218,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the work item type |
 | workitemtypename | Required | String | Name of the work item type |
-## <a name="getworkitemtypes"></a> getworkitemtypes
+## getworkitemtypes
 **Gets a list of work item types in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -226,13 +226,13 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the work item types |
-## <a name="listconfig"></a> listconfig
+## listconfig
 **List an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Name of the configuration |
-## <a name="listgitrepos"></a> listgitrepos
+## listgitrepos
 **Gets list of Git repositories from an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -240,21 +240,21 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the git repositories |
-## <a name="listprocesstemplates"></a> listprocesstemplates
+## listprocesstemplates
 **List process templates**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
-## <a name="listprojects"></a> listprojects
+## listprojects
 **List team projects**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
-## <a name="listworkitemqueries"></a> listworkitemqueries
+## listworkitemqueries
 **Gets a list of all work item queries in an Azure DevOps Team Project.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -262,13 +262,13 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | quiet | Optional | Boolean | Quiet mode |
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name that contains the work item queries |
-## <a name="removeconfig"></a> removeconfig
+## removeconfig
 **Remove an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Required | String | Name of the configuration |
-## <a name="runworkitemquery"></a> runworkitemquery
+## runworkitemquery
 **Run work item query**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -277,7 +277,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project name containing the qork item query to run |
 | queryname | Required | String | Work item query name |
-## <a name="setiteration"></a> setiteration
+## setiteration
 **Create iteration including start and end date**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -288,7 +288,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | startdate | Required | DateTime | Iteration start date |
 | enddate | Required | DateTime | Iteration end date |
 | name | Required | String | Iteration name |
-## <a name="setworkitemstate"></a> setworkitemstate
+## setworkitemstate
 **Set the state value on an existing work item**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -299,7 +299,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | id | Required | Int32 | Work item id for the work item to be updated |
 | date | Optional | DateTime | Iteration end date |
 | override | Optional | Boolean | Override non-matching state values and force set the value you want |
-## <a name="showworkitemquery"></a> showworkitemquery
+## showworkitemquery
 **Show work item query**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -308,7 +308,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | config | Optional | String | Configuration name to use |
 | teamproject | Required | String | Team project that contains the work item query |
 | queryname | Required | String | Work item query name |
-## <a name="createfromgenerator"></a> createfromgenerator
+## createfromgenerator
 **Create work items using random data generator**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -324,7 +324,7 @@ To add new configuration or modify an existing configuration, use the `azdoutil 
 | addsessiontag | Optional | Boolean | Add a session tag to work items |
 | output | Optional | String | Save generated script file to disk in this directory. Note the filename will be auto-generated. |
 | scriptonly | Optional | Boolean | Creates the excel export script. Requires an arg value for 'output' |
-## <a name="createfromexcel"></a> createfromexcel
+## createfromexcel
 **Create work items using Excel script**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
