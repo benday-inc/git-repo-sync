@@ -1,3 +1,4 @@
+using Benday.CommandsFramework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,93 +6,49 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
-namespace Benday.GitRepoSync.ConsoleUi
+namespace Benday.GitRepoSync.Api
 {
-    public class UpdateAllReposCommand : CommandBase
+    [Command(Name = Constants.CommandArgumentNameUpdateAllRepos,
+        IsAsync = false,
+        Description = "Reads existing Git repositories and outputs configuration information to config file.")]
+    public class UpdateAllReposCommand : SynchronousCommand
     {
-        public UpdateAllReposCommand(string[] args) : base(args)
+        public UpdateAllReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
+               base(info, outputProvider)
         {
 
         }
 
-        protected override string CommandArgumentName
+        public override ArgumentCollection GetArguments()
         {
-            get
-            {
-                return Constants.CommandArgumentNameUpdateAllRepos;
-            }
+            var args = new ArgumentCollection();
+
+            args.AddString(Constants.ArgumentNameConfigFile)
+                .WithDescription("Path to configuration file");
+
+            args.AddString(Constants.ArgumentNameCodeFolderPath)
+                .WithDescription("Path for code directory variable in the config file.");
+
+            return args;
         }
 
-        protected override void DisplayUsage(StringBuilder builder)
+
+        protected override void OnExecute()
         {
-            Console.WriteLine($"Command name: {CommandArgumentName}");
-            Console.WriteLine($"Arguments:");
-            Console.WriteLine($"\t{Constants.ArgumentNameConfigFile}");
-            Console.WriteLine($"\t{Constants.ArgumentNameCodeFolderPath}");
-            Console.WriteLine($"\t[{Constants.ArgumentNameQuickSync}]");
-        }
+            ValidateArguments();
 
-        protected override List<string> GetRequiredArguments()
-        {
-            var argumentNames = new List<string>();
+            var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
+            var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
 
-            argumentNames.Add(Constants.ArgumentNameConfigFile);
-            argumentNames.Add(Constants.ArgumentNameCodeFolderPath);
-
-            return argumentNames;
-        }
-
-        protected string GetPath(string fromValue)
-        {
-            if (fromValue.StartsWith("~") == true)
-            {
-                fromValue = fromValue.Replace("~",
-                    Environment.GetEnvironmentVariable("HOME"));
-            }
-
-            fromValue = Path.GetFullPath(fromValue);
-
-            return fromValue;
-        }
-
-        protected override void AfterValidateArguments()
-        {
-            var configFilename = GetPath(GetArgumentValue(Constants.ArgumentNameConfigFile));
-            var codeFolderPath = GetPath(GetArgumentValue(Constants.ArgumentNameCodeFolderPath));
-
-            if (Directory.Exists(codeFolderPath) == false)
-            {
-                // var message = $"Code folder directory does not exist - {codeFolderPath}";
-
-                Console.WriteLine($"Code folder directory does not exist - {codeFolderPath}. Creating...");
-                // Console.Error.WriteLine(message);
-
-                // throw new DirectoryNotFoundException(message);
-                Directory.CreateDirectory(codeFolderPath);
-            }
-
-            if (File.Exists(configFilename) == false)
-            {
-                var message = $"Config file does not exist - {configFilename}";
-
-                Console.Error.WriteLine(message);
-
-                throw new DirectoryNotFoundException(message);
-            }
-        }
-
-        public override void Run()
-        {
-            var configFilename = GetPath(GetArgumentValue(Constants.ArgumentNameConfigFile));
-            var codeFolderPath = GetPath(GetArgumentValue(Constants.ArgumentNameCodeFolderPath));
-            var listCategoriesMode = ArgNameExists(Constants.ArgumentNameListCategories);
-            var hasCategoryFilter = ArgNameExists(Constants.ArgumentNameCategory);
-            var runMultithreaded = ArgNameExists(Constants.ArgumentNameParallel);
+            var listCategoriesMode = Arguments.HasValue(Constants.ArgumentNameListCategories);
+            var hasCategoryFilter = Arguments.HasValue(Constants.ArgumentNameCategory);
+            var runMultithreaded = Arguments.HasValue(Constants.ArgumentNameParallel);
 
             bool isQuickSyncMode = false;
 
-            if (hasCategoryFilter == false && ArgNameExists(Constants.ArgumentNameQuickSync) == true)
+            if (hasCategoryFilter == false && Arguments.HasValue(Constants.ArgumentNameQuickSync) == true)
             {
                 isQuickSyncMode = true;
             }
@@ -106,18 +63,18 @@ namespace Benday.GitRepoSync.ConsoleUi
                                   select temp.Category)
                                   .Distinct().OrderBy(x => x);
 
-                Console.WriteLine($"*** Category List ***");
+                WriteLine($"*** Category List ***");
 
                 foreach (var item in categories)
                 {
-                    Console.WriteLine($"{item}");
+                    WriteLine($"{item}");
                 }
             }
             else
             {
                 if (hasCategoryFilter == true)
                 {
-                    var categoryFilter = GetArgumentValue(Constants.ArgumentNameCategory);
+                    var categoryFilter = Arguments.GetStringValue(Constants.ArgumentNameCategory);
 
                     repos = repos.Where(x => x.Category == categoryFilter).ToList();
 
@@ -147,17 +104,56 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
+
+
+        protected string GetPath(string fromValue)
+        {
+            if (fromValue.StartsWith("~") == true)
+            {
+                fromValue = fromValue.Replace("~",
+                    Environment.GetEnvironmentVariable("HOME"));
+            }
+
+            fromValue = Path.GetFullPath(fromValue);
+
+            return fromValue;
+        }
+
+        protected void ValidateArguments()
+        {
+            var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
+            var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
+
+            if (Directory.Exists(codeFolderPath) == false)
+            {
+                // var message = $"Code folder directory does not exist - {codeFolderPath}";
+
+                WriteLine($"Code folder directory does not exist - {codeFolderPath}. Creating...");
+                // Console.Error.WriteLine(message);
+
+                // throw new DirectoryNotFoundException(message);
+                Directory.CreateDirectory(codeFolderPath);
+            }
+
+            if (File.Exists(configFilename) == false)
+            {
+                var message = $"Config file does not exist - {configFilename}";
+
+                throw new KnownException(message);
+            }
+        }        
+
         private void UpdateRepo(bool isQuickSyncMode,
             RepositoryInfo repo, string codeFolderPath,
             int currentNumber, int totalCount)
         {
             if (isQuickSyncMode == true && repo.IsQuickSync == false)
             {
-                Console.WriteLine($"Quick sync is skipping repo {currentNumber} of {totalCount}: {repo.Description}...");
+                WriteLine($"Quick sync is skipping repo {currentNumber} of {totalCount}: {repo.Description}...");
             }
             else
             {
-                Console.WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
+                WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
 
                 var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
 
@@ -176,7 +172,7 @@ namespace Benday.GitRepoSync.ConsoleUi
 
         private void CloneRepo(RepositoryInfo repo, string parentFolder)
         {
-            Console.WriteLine($"Cloning {repo.Description} into {parentFolder}...");
+            WriteLine($"Cloning {repo.Description} into {parentFolder}...");
 
             if (Directory.Exists(parentFolder) == false)
             {
@@ -192,7 +188,7 @@ namespace Benday.GitRepoSync.ConsoleUi
 
         private void SyncRepo(RepositoryInfo repo, string repoFolder)
         {
-            Console.WriteLine($"Getting changes for {repo.Description}...");
+            WriteLine($"Getting changes for {repo.Description}...");
 
             var fetchCommand = new ProcessStartInfo("git",
                 $"fetch");
@@ -205,17 +201,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             // Process.Start(fetchCommand).WaitForExit(); ;
             Process.Start(pullCommand).WaitForExit(); ;
         }
-
-        private void DebugRepoInfo(string codeFolderPath, RepositoryInfo repo)
-        {
-            Console.WriteLine($"**********");
-            Console.WriteLine($"Category     : {repo.Category}");
-            Console.WriteLine($"Name         : {repo.RepositoryName}");
-            Console.WriteLine($"Desc         : {repo.Description}");
-            Console.WriteLine($"Parent folder: {repo.ParentFolder}");
-            Console.WriteLine($"To folder    : {ReplaceCodeVariable(repo.ParentFolder, codeFolderPath)}");
-            Console.WriteLine($"Git Url      : {repo.GitUrl}");
-        }
+        
 
         private string ReplaceCodeVariable(string parentFolder, string codeFolderPath)
         {
@@ -280,7 +266,7 @@ namespace Benday.GitRepoSync.ConsoleUi
         {
             bool returnValue = defaultValue;
 
-            Boolean.TryParse(fromValue, out returnValue);
+            bool.TryParse(fromValue, out returnValue);
 
             return returnValue;
         }
@@ -304,47 +290,5 @@ namespace Benday.GitRepoSync.ConsoleUi
                 return lastToken;
             }
         }
-
-        private string GetGitRepoRemote(string dir)
-        {
-            var temp = new ProcessStartInfo();
-
-            temp.WorkingDirectory = dir;
-
-            temp.FileName = "git";
-
-            temp.Arguments = "remotes";
-
-            temp.CreateNoWindow = true;
-
-            temp.UseShellExecute = false;
-            temp.RedirectStandardOutput = true;
-
-            var process = Process.Start(temp);
-
-            process.WaitForExit();
-
-            var output = process.StandardOutput.ReadLine();
-
-            if (output != null)
-            {
-                output = output.Replace("origin	", String.Empty).Replace(" (fetch)", String.Empty);
-
-                if (output.Contains('\t') == true)
-                {
-                    var tokens = output.Split('\t');
-
-                    output = tokens.Last();
-                }
-
-                return output;
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
-
     }
 }

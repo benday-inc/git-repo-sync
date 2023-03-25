@@ -1,52 +1,47 @@
+using Benday.CommandsFramework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
-namespace Benday.GitRepoSync.ConsoleUi
+namespace Benday.GitRepoSync.Api
 {
-    public class ExportReposAsConfigFileCommand : CommandBase
+    [Command(Name = Constants.CommandArgumentNameExportReposAsConfigFile,
+        IsAsync = false,
+        Description = "Reads existing Git repositories and outputs configuration information to config file.")]
+    public class ExportReposAsConfigFileCommand : SynchronousCommand
     {
-        public ExportReposAsConfigFileCommand(string[] args) : base(args)
+        public ExportReposAsConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
+               base(info, outputProvider)
         {
-            
-        }
-
-        protected override string CommandArgumentName
-        {
-            get
-            {
-                return Constants.CommandArgumentNameExportCloneGitRepos;
-            }
-        }
-
-        protected override void DisplayUsage(StringBuilder builder)
-        {
-            Console.WriteLine($"Command name: {CommandArgumentName}");
-            Console.WriteLine($"Arguments:");
-            Console.WriteLine($"\t{Constants.ArgumentNameFromPath}");
-            Console.WriteLine($"\t{Constants.ArgumentNameCategory} (optional)");
-            Console.WriteLine($"\t{Constants.ArgumentNameCodeFolderPath} (optional)");
 
         }
 
-        protected override List<string> GetRequiredArguments()
+        public override ArgumentCollection GetArguments()
         {
-            var argumentNames = new List<string>();
+            var args = new ArgumentCollection();
 
-            argumentNames.Add(Constants.ArgumentNameFromPath);
+            args.AddString(Constants.ArgumentNameFromPath)
+                .WithDescription("Starting path for search");
 
-            return argumentNames;
+            args.AddString(Constants.ArgumentNameCodeFolderPath)
+                .WithDescription("Path for code directory. This becomes a variable in the config file.");
+
+            args.AddString(Constants.ArgumentNameCategory)
+                .WithDescription("Category name for this group of git repositories.");
+
+            return args;
         }
 
-        public override void Run()
+        protected override void OnExecute()
         {
-            string baseDir = GetArgumentValue(Constants.ArgumentNameFromPath);
+            string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
 
-            var codeDirArgValue = GetArgumentValue(Constants.ArgumentNameCodeFolderPath);
-            var category = GetArgumentValue(Constants.ArgumentNameCategory, "default category");
+            var codeDirArgValue = Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath);
+            var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
 
             string baseDirFormattedForConfigFile = baseDir;
 
@@ -59,11 +54,11 @@ namespace Benday.GitRepoSync.ConsoleUi
 
                 codeDirArgValue = Path.GetFullPath(codeDirArgValue);
 
-                Console.WriteLine($"INFO: Replacing code folder '{codeDirArgValue}' with variable '{Constants.CodeDirVariable}'.");
+                WriteLine($"INFO: Replacing code folder '{codeDirArgValue}' with variable '{Constants.CodeDirVariable}'.");
 
                 if (Directory.Exists(codeDirArgValue) == false)
                 {
-                    throw new DirectoryNotFoundException("Value for code folder does not exist.");
+                    throw new KnownException($"Directory for code folder '{codeDirArgValue}' does not exist.");
                 }
 
                 baseDirFormattedForConfigFile = baseDir.Replace(codeDirArgValue, Constants.CodeDirVariable);
@@ -85,7 +80,7 @@ namespace Benday.GitRepoSync.ConsoleUi
                 foreach (var dir in dirs)
                 {
                     var remote = GetGitRepoRemote(dir).Trim();
-                    
+
                     if (String.IsNullOrWhiteSpace(remote) == false)
                     {
                         var repoName = GetGitRepoName(remote).Replace("-", " ");
@@ -97,20 +92,20 @@ namespace Benday.GitRepoSync.ConsoleUi
 
                 builder.AppendLine();
 
-                string script = builder.ToString();
+                var script = builder.ToString();
 
-                Console.WriteLine(script);
+                WriteLine(script);
             }
             else
             {
-                Console.Error.WriteLine("directory does not exist");
+                throw new KnownException($"Base directory '{baseDir}' does not exist.");
             }
         }
 
         private string GetGitRepoName(string gitRepoUrl)
         {
             var repoUri = new Uri(gitRepoUrl);
-            
+
             var lastToken = repoUri.Segments.Last();
 
             if (String.IsNullOrWhiteSpace(lastToken) == true)
@@ -127,7 +122,7 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-            private string GetGitRepoRemote(string dir)
+        private string GetGitRepoRemote(string dir)
         {
             var temp = new ProcessStartInfo();
 
@@ -166,7 +161,5 @@ namespace Benday.GitRepoSync.ConsoleUi
                 return string.Empty;
             }
         }
-
-        
     }
 }

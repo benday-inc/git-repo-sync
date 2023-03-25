@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Benday.GitRepoSync.ConsoleUi
+namespace Benday.GitRepoSync.Api
 {
     public class RepositoryInfo
     {

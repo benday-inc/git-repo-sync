@@ -1,39 +1,41 @@
+﻿using Benday.CommandsFramework;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
-namespace Benday.GitRepoSync.ConsoleUi
+namespace Benday.GitRepoSync.Api
 {
-    public class ExportCloneGitReposCommand : CommandBase
+    [Command(Name = Constants.CommandArgumentNameExportCloneGitRepos,
+    IsAsync = false,
+    Description = "Reads existing Git repositories and outputs configuration information to console.")]
+    public class ExportCloneGitReposCommand : SynchronousCommand
     {
-        public ExportCloneGitReposCommand(string[] args) : base(args)
+
+        public ExportCloneGitReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
+            base(info, outputProvider)
         {
-            
+
         }
 
-        protected override string CommandArgumentName
+
+        public override ArgumentCollection GetArguments()
         {
-            get
-            {
-                return Constants.CommandArgumentNameExportCloneGitRepos;
-            }
+            var args = new ArgumentCollection();
+
+            args.AddString(Constants.ArgumentNameFromPath)
+                .WithDescription("Starting path");
+
+            return args;
         }
 
-        protected override List<string> GetRequiredArguments()
-        {
-            var argumentNames = new List<string>();
-
-            argumentNames.Add(Constants.ArgumentNameFromPath);
-
-            return argumentNames;
-        }
-
-        public override void Run()
-        {
-            string baseDir = GetArgumentValue(Constants.ArgumentNameFromPath);
+        protected override void OnExecute()
+        {            
+            string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
 
             StringBuilder builder = new StringBuilder();
 
@@ -57,11 +59,11 @@ namespace Benday.GitRepoSync.ConsoleUi
 
                 string script = builder.ToString();
 
-                Console.WriteLine(script);
+                WriteLine(script);
             }
             else
             {
-                Console.Error.WriteLine("directory does not exist");
+                throw new KnownException("directory does not exist");
             }
         }
 
@@ -105,6 +107,6 @@ namespace Benday.GitRepoSync.ConsoleUi
             }
         }
 
-        
+
     }
 }

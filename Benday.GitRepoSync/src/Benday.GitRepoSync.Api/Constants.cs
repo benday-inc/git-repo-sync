@@ -1,4 +1,4 @@
-namespace Benday.GitRepoSync.ConsoleUi
+namespace Benday.GitRepoSync.Api
 {
     public static class Constants
     {
