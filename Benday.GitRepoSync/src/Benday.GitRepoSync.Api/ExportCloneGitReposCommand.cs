@@ -37,7 +37,7 @@ namespace Benday.GitRepoSync.Api
         {            
             string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
 
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
 
             if (Directory.Exists(baseDir) == true)
             {
@@ -69,18 +69,19 @@ namespace Benday.GitRepoSync.Api
 
         private static string GetGitRepoRemote(string dir)
         {
-            var temp = new ProcessStartInfo();
+            var temp = new ProcessStartInfo
+            {
+                WorkingDirectory = dir,
 
-            temp.WorkingDirectory = dir;
+                FileName = "git",
 
-            temp.FileName = "git";
+                Arguments = "remotes",
 
-            temp.Arguments = "remotes";
+                CreateNoWindow = true,
 
-            temp.CreateNoWindow = true;
-
-            temp.UseShellExecute = false;
-            temp.RedirectStandardOutput = true;
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
 
             var process = Process.Start(temp);
 

@@ -104,8 +104,6 @@ namespace Benday.GitRepoSync.Api
             }
         }
 
-
-
         protected string GetPath(string fromValue)
         {
             if (fromValue.StartsWith("~") == true)
@@ -180,8 +178,10 @@ namespace Benday.GitRepoSync.Api
             }
 
             var cloneCommand = new ProcessStartInfo("git",
-                $"clone {repo.GitUrl}");
-            cloneCommand.WorkingDirectory = parentFolder;
+                $"clone {repo.GitUrl}")
+            {
+                WorkingDirectory = parentFolder
+            };
 
             Process.Start(cloneCommand).WaitForExit();
         }
@@ -190,15 +190,12 @@ namespace Benday.GitRepoSync.Api
         {
             WriteLine($"Getting changes for {repo.Description}...");
 
-            var fetchCommand = new ProcessStartInfo("git",
-                $"fetch");
-            fetchCommand.WorkingDirectory = repoFolder;
-            
             var pullCommand = new ProcessStartInfo("git",
-                $"pull");
-            pullCommand.WorkingDirectory = repoFolder;
+                $"pull")
+            {
+                WorkingDirectory = repoFolder
+            };
 
-            // Process.Start(fetchCommand).WaitForExit(); ;
             Process.Start(pullCommand).WaitForExit(); ;
         }
         
@@ -249,13 +246,14 @@ namespace Benday.GitRepoSync.Api
             }
             else
             {
-                var temp = new RepositoryInfo();
-
-                temp.IsQuickSync = ToBoolean(tokens[0]);
-                temp.Category = tokens[1];
-                temp.Description = tokens[2];
-                temp.ParentFolder = tokens[3];
-                temp.GitUrl = tokens[4];
+                var temp = new RepositoryInfo
+                {
+                    IsQuickSync = ToBoolean(tokens[0]),
+                    Category = tokens[1],
+                    Description = tokens[2],
+                    ParentFolder = tokens[3],
+                    GitUrl = tokens[4]
+                };
                 temp.RepositoryName = GetGitRepoName(temp.GitUrl);
 
                 return temp;
@@ -264,11 +262,14 @@ namespace Benday.GitRepoSync.Api
 
         private bool ToBoolean(string fromValue, bool defaultValue = false)
         {
-            bool returnValue = defaultValue;
-
-            bool.TryParse(fromValue, out returnValue);
-
-            return returnValue;
+            if (bool.TryParse(fromValue, out var result) == true)
+            {
+                return result;
+            }
+            else
+            {
+                return defaultValue;
+            }
         }
 
         private string GetGitRepoName(string gitRepoUrl)

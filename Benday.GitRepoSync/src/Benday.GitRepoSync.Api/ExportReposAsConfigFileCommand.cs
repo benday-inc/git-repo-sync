@@ -68,7 +68,7 @@ namespace Benday.GitRepoSync.Api
                 Console.WriteLine("INFO: Not replacing code folder with variable.");
             }
 
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
 
             // header line
             builder.AppendLine("quicksync,category,description,parent folder,giturl");
@@ -102,7 +102,7 @@ namespace Benday.GitRepoSync.Api
             }
         }
 
-        private string GetGitRepoName(string gitRepoUrl)
+        private static string GetGitRepoName(string gitRepoUrl)
         {
             var repoUri = new Uri(gitRepoUrl);
 
@@ -122,20 +122,21 @@ namespace Benday.GitRepoSync.Api
             }
         }
 
-        private string GetGitRepoRemote(string dir)
+        private static string GetGitRepoRemote(string dir)
         {
-            var temp = new ProcessStartInfo();
+            var temp = new ProcessStartInfo
+            {
+                WorkingDirectory = dir,
 
-            temp.WorkingDirectory = dir;
+                FileName = "git",
 
-            temp.FileName = "git";
+                Arguments = "remotes",
 
-            temp.Arguments = "remotes";
+                CreateNoWindow = true,
 
-            temp.CreateNoWindow = true;
-
-            temp.UseShellExecute = false;
-            temp.RedirectStandardOutput = true;
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
 
             var process = Process.Start(temp);
 
