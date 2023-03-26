@@ -132,7 +132,7 @@ public class MarkdownUsageFormatterFixture
 
         Console.WriteLine($"assembly dir: {assemblyDir}");
 
-        var relativePathToConfig = "..\\..\\..\\..\\".Replace('\\', Path.DirectorySeparatorChar);
+        var relativePathToConfig = "..\\..\\..\\..\\..\\".Replace('\\', Path.DirectorySeparatorChar);
 
         var pathToDir = Path.Combine(assemblyDir!, relativePathToConfig);
 
@@ -157,7 +157,7 @@ public class MarkdownUsageFormatterFixture
 
         Console.WriteLine($"assembly dir: {assemblyDir}");
 
-        var relativePathToConfig = "..\\..\\..\\..\\misc\\".Replace('\\', Path.DirectorySeparatorChar);
+        var relativePathToConfig = "..\\..\\..\\..\\..\\..\\misc\\".Replace('\\', Path.DirectorySeparatorChar);
 
         var pathToDir = Path.Combine(assemblyDir!, relativePathToConfig);
 
@@ -165,8 +165,8 @@ public class MarkdownUsageFormatterFixture
 
         Console.WriteLine($"Misc directory: {dirInfo.FullName}");
 
-        Assert.IsTrue(Directory.Exists(pathToDir), "Could not locate directory at '{0}'.",
-            pathToDir);
+        Assert.IsTrue(Directory.Exists(pathToDir), "Could not locate directory at '{0}' -- '{1}'.",
+            pathToDir, new DirectoryInfo(pathToDir).FullName);
 
         return dirInfo.FullName;
     }

@@ -31,8 +31,8 @@
 		<Nullable>enable</Nullable>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 
-		<PackageProjectUrl>https://github.com/benday-inc/azdoutil</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/benday-inc/azdoutil.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/benday-inc/git-repo-sync</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
