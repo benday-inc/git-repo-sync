@@ -83,7 +83,7 @@ namespace Benday.GitRepoSync.Api
                 RedirectStandardOutput = true
             };
 
-            var process = Process.Start(temp);
+            var process = Process.Start(temp) ?? throw new InvalidOperationException($"Null process start return value.");
 
             process.WaitForExit();
 
