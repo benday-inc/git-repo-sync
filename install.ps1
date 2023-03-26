@@ -10,4 +10,5 @@ if ($reinstall -eq $true)
     &.\uninstall.ps1
 }
 
-dotnet tool install --global --add-source .\Benday.AzureDevOpsUtil.ConsoleUi\bin\Debug azdoutil
+dotnet tool install --global --add-source .\Benday.GitRepoSync\src\Benday.GitRepoSync.ConsoleUi\bin\Debug\ gitreposync
+                                          

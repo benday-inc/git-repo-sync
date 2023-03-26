@@ -1,4 +1,4 @@
 #!/bin/bash
 
-dotnet tool uninstall --global azdoutil
+dotnet tool uninstall --global gitreposync
 

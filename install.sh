@@ -16,4 +16,4 @@ else
     ./uninstall.sh
 fi
 
-dotnet tool install --global --add-source ./Benday.AzureDevOpsUtil.ConsoleUi/bin/Debug azdoutil
+dotnet tool install --global --add-source ./Benday.GitRepoSync/src/Benday.GitRepoSync.ConsoleUi/bin/Debug gitreposync                                          
