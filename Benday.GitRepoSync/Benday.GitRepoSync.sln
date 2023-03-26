@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benday.GitRepoSync.UnitTest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{207E7309-5AF3-4F0E-8A37-B934EA6D1ECB}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		..\misc\readme-header.md = ..\misc\readme-header.md
 	EndProjectSection
 EndProject
