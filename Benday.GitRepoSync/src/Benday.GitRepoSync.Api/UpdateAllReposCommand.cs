@@ -25,11 +25,17 @@ namespace Benday.GitRepoSync.Api
         {
             var args = new ArgumentCollection();
 
+            args.AddString(Constants.ArgumentNameConfigurationName)
+                .AsNotRequired()
+                .WithDescription("Configuration name to use");
+
+            /*
             args.AddString(Constants.ArgumentNameConfigFile)
                 .WithDescription("Path to configuration file");
 
             args.AddString(Constants.ArgumentNameCodeFolderPath)
                 .WithDescription("Path for code directory variable in the config file.");
+            */
 
             return args;
         }

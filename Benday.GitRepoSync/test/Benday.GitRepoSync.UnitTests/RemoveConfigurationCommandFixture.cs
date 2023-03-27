@@ -67,13 +67,13 @@ public class RemoveConfigurationCommandFixture
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config1",
-            Token = "token1"
+            ConfigurationFilePath = "token1"
         });
 
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config2",
-            Token = "token2"
+            ConfigurationFilePath = "token2"
         });
 
         Utilities.AssertFileExists(ConfigurationManager.PathToConfigurationFile);

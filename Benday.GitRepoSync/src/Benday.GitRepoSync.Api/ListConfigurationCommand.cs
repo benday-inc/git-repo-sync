@@ -66,7 +66,8 @@ public class ListConfigurationCommand : SynchronousCommand
         {
             WriteLine("***");
             WriteLine($"Name: {config.Name}");
-            WriteLine($"Token: {config.Token}");
+            WriteLine($"Configuration File: {config.ConfigurationFilePath}");
+            WriteLine($"Code Directory: {config.CodeDirectoryValue}");
         }
     }
 }

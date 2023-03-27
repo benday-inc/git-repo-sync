@@ -56,7 +56,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         var config = new GitRepoSyncConfiguration()
         {
-            Token = expectedToken,
+            ConfigurationFilePath = expectedToken,
             Name = expectedConfigurationName
         };
 
@@ -73,7 +73,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         Assert.IsNotNull(actual, $"Could not find configuration named '{expectedConfigurationName}'");
         Assert.AreEqual(expectedConfigurationName, actual.Name, "Config name was wrong");
-        Assert.AreEqual(expectedToken, actual.Token, "Token was wrong");
+        Assert.AreEqual(expectedToken, actual.ConfigurationFilePath, "Token was wrong");
     }
 
     [TestMethod]
@@ -88,7 +88,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         var config = new GitRepoSyncConfiguration()
         {
-            Token = expectedToken,
+            ConfigurationFilePath = expectedToken,
             Name = expectedConfigurationName
         };
 
@@ -104,7 +104,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         Assert.IsNotNull(actual, $"Could not find configuration named '{expectedConfigurationName}'");
         Assert.AreEqual(expectedConfigurationName, actual.Name, "Config name was wrong");
-        Assert.AreEqual(expectedToken, actual.Token, "Token was wrong");
+        Assert.AreEqual(expectedToken, actual.ConfigurationFilePath, "Token was wrong");
     }
 
     [TestMethod]
@@ -116,13 +116,13 @@ public class GitRepoSyncConfigurationManagerFixture
         SystemUnderTest.Save(new GitRepoSyncConfiguration()
         {
             Name = "config1",
-            Token = "token1"
+            ConfigurationFilePath = "token1"
         });
 
         SystemUnderTest.Save(new GitRepoSyncConfiguration()
         {
             Name = "config2",
-            Token = "token2"
+            ConfigurationFilePath = "token2"
         });
 
         // act
@@ -143,13 +143,13 @@ public class GitRepoSyncConfigurationManagerFixture
         SystemUnderTest.Save(new GitRepoSyncConfiguration()
         {
             Name = "config1",
-            Token = "token1"
+            ConfigurationFilePath = "token1"
         });
 
         SystemUnderTest.Save(new GitRepoSyncConfiguration()
         {
             Name = "config2",
-            Token = "token2"
+            ConfigurationFilePath = "token2"
         });
 
         // act

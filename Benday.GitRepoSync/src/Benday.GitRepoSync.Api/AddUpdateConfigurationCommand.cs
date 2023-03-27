@@ -19,10 +19,14 @@ public class AddUpdateConfigurationCommand : SynchronousCommand
         arguments.AddString(Constants.ArgumentNameConfigurationName)
             .WithDescription("Name of the configuration")
             .AsNotRequired();
-        arguments.AddString(Constants.ArgumentNameToken)
-            .WithDescription("PAT for this collection")
+        arguments.AddString(Constants.ArgumentNameConfigurationFile)
+            .WithDescription("Configuration file path")
             .AsRequired();
-        
+        arguments.AddString(Constants.ArgumentNameCodeDirectory)
+            .WithDescription($"Code directory value. Note: this is used as the code variable value " +
+                $" '{Constants.CodeDirVariable}' in your config file.")
+            .AsRequired();
+
         return arguments;
     }
 
@@ -38,7 +42,8 @@ public class AddUpdateConfigurationCommand : SynchronousCommand
 
         var config = new GitRepoSyncConfiguration()
         {
-            Token = Arguments[Constants.ArgumentNameToken].Value,
+            ConfigurationFilePath = Arguments[Constants.ArgumentNameConfigurationFile].Value,
+            CodeDirectoryValue = Arguments[Constants.ArgumentNameCodeDirectory].Value,
             Name = configName
         };
 

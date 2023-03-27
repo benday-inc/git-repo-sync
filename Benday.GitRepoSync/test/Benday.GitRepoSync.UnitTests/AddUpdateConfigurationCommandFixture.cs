@@ -66,12 +66,13 @@ public class AddUpdateConfigurationCommandFixture
 
         var expectedConfigurationName = "config123";
         var expectedToken = "token-value";
-        var expectedUrl = "https://dev.azure.com/benday/";
+        var expectedCodeDir = "c:\\code";
 
         var commandLineArgs = Utilities.GetStringArray(
             Constants.CommandArgumentNameAddUpdateConfig,
             $"/{Constants.ArgumentNameConfigurationName}:{expectedConfigurationName}",
-            $"/{Constants.ArgumentNameToken}:{expectedToken}");
+            $"/{Constants.ArgumentNameConfigurationFile}:{expectedToken}",
+            $"/{Constants.ArgumentNameCodeDirectory}:{expectedCodeDir}");
 
         var executionInfo = new ArgumentCollectionFactory().Parse(commandLineArgs);
 
@@ -89,7 +90,7 @@ public class AddUpdateConfigurationCommandFixture
 
         Assert.IsNotNull(actual, $"Could not find configuration named '{expectedConfigurationName}'");
         Assert.AreEqual(expectedConfigurationName, actual.Name, "Config name was wrong");
-        Assert.AreEqual(expectedToken, actual.Token, "Token was wrong");
+        Assert.AreEqual(expectedToken, actual.ConfigurationFilePath, "Token was wrong");
     }
 
     [TestMethod]
@@ -100,11 +101,12 @@ public class AddUpdateConfigurationCommandFixture
 
         var expectedConfigurationName = Constants.DefaultConfigurationName;
         var expectedToken = "token-value";
-        var expectedUrl = "https://dev.azure.com/benday/";
+        var expectedCodeDir = "c:\\code";
 
         var commandLineArgs = Utilities.GetStringArray(
             Constants.CommandArgumentNameAddUpdateConfig,
-            $"/{Constants.ArgumentNameToken}:{expectedToken}");
+            $"/{Constants.ArgumentNameConfigurationFile}:{expectedToken}",
+            $"/{Constants.ArgumentNameCodeDirectory}:{expectedCodeDir}");
 
         var executionInfo = new ArgumentCollectionFactory().Parse(commandLineArgs);
 
@@ -122,6 +124,6 @@ public class AddUpdateConfigurationCommandFixture
 
         Assert.IsNotNull(actual, $"Could not find configuration named '{expectedConfigurationName}'");
         Assert.AreEqual(expectedConfigurationName, actual.Name, "Config name was wrong");
-        Assert.AreEqual(expectedToken, actual.Token, "Token was wrong");
+        Assert.AreEqual(expectedToken, actual.ConfigurationFilePath, "Token was wrong");
     }
 }

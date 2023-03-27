@@ -67,13 +67,15 @@ public class ListConfigurationCommandFixture
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config1",
-            Token = "token1"
+            ConfigurationFilePath = "token1",
+            CodeDirectoryValue = "codedirvalue"
         });
 
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config2",
-            Token = "token2"
+            ConfigurationFilePath = "token2",
+            CodeDirectoryValue = "codedirvalue"
         });
 
         Utilities.AssertFileExists(ConfigurationManager.PathToConfigurationFile);
@@ -94,7 +96,8 @@ public class ListConfigurationCommandFixture
         var output = OutputProvider.GetOutput();
         Console.WriteLine(output);
 
-        Assert.IsTrue(output.Contains("Token: token2"), "didn't find token2 in output");
+        Assert.IsTrue(output.Contains("Configuration File: token2"), "didn't find token2 in output");
+        Assert.IsTrue(output.Contains("Code Directory: codedirvalue"), "didn't find codedirvalue in output");
         Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
     }
 
@@ -107,13 +110,15 @@ public class ListConfigurationCommandFixture
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config1",
-            Token = "token1"
+            ConfigurationFilePath = "token1",
+            CodeDirectoryValue = "codedirvalue"
         });
 
         ConfigurationManager.Save(new GitRepoSyncConfiguration()
         {
             Name = "config2",
-            Token = "token2"
+            ConfigurationFilePath = "token2",
+            CodeDirectoryValue = "codedirvalue"
         });
 
         Utilities.AssertFileExists(ConfigurationManager.PathToConfigurationFile);
@@ -133,7 +138,8 @@ public class ListConfigurationCommandFixture
         var output = OutputProvider.GetOutput();
         Console.WriteLine(output);
 
-        Assert.IsTrue(output.Contains("Token: token2"), "didn't find token2 in output");
+        Assert.IsTrue(output.Contains("Configuration File: token2"), "didn't find token2 in output");
+        Assert.IsTrue(output.Contains("Code Directory: codedirvalue"), "didn't find codedirvalue in output");
         Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
     }
 

@@ -27,6 +27,7 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameToFileName = "filename";
 
         public const string ArgumentNameConfigurationName = "config";
-        public const string ArgumentNameToken = "pat";        
+        public const string ArgumentNameConfigurationFile = "filename";        
+        public const string ArgumentNameCodeDirectory = "codedir";        
     }
 }
