@@ -106,15 +106,26 @@ namespace Benday.GitRepoSync.Api
 
         protected string GetPath(string fromValue)
         {
-            if (fromValue.StartsWith("~") == true)
+            if (Path.IsPathFullyQualified(fromValue) == true)
             {
-                fromValue = fromValue.Replace("~",
-                    Environment.GetEnvironmentVariable("HOME"));
+                return fromValue;
             }
+            else
+            {
+                if (fromValue.StartsWith("~") == true)
+                {
+                    fromValue = fromValue.Replace("~",
+                        Environment.GetEnvironmentVariable("HOME"));
+                }
+                else
+                {
+                    fromValue = Path.Combine(Environment.CurrentDirectory, fromValue);
+                }
 
-            fromValue = Path.GetFullPath(fromValue);
-
-            return fromValue;
+                var info = new FileInfo(fromValue);
+                
+                return info.FullName;
+            }
         }
 
         protected void ValidateArguments()
