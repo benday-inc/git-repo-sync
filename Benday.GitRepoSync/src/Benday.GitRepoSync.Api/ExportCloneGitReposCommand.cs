@@ -10,9 +10,9 @@ using System.Xml.Linq;
 
 namespace Benday.GitRepoSync.Api
 {
-    [Command(Name = Constants.CommandArgumentNameExportCloneGitRepos,
-    IsAsync = false,
-    Description = "Reads existing Git repositories and outputs configuration information to console.")]
+    //[Command(Name = Constants.CommandArgumentNameExportCloneGitRepos,
+    //IsAsync = false,
+    //Description = "Reads existing Git repositories and outputs configuration information to console.")]
     public class ExportCloneGitReposCommand : SynchronousCommand
     {
 

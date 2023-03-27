@@ -33,6 +33,10 @@ namespace Benday.GitRepoSync.Api
             args.AddString(Constants.ArgumentNameCategory)
                 .WithDescription("Category name for this group of git repositories.");
 
+            args.AddString(Constants.ArgumentNameToFileName)
+                .AsNotRequired()
+                .WithDescription("Writes configuration to file name");                
+
             return args;
         }
 
@@ -104,7 +108,9 @@ namespace Benday.GitRepoSync.Api
                     {
                         numberOfReposFound++;
 
-                        var repoName = GetGitRepoName(remote).Replace("-", " ");
+                        var repoName = GetGitRepoName(remote)
+                            .Replace("-", " ")
+                            .Replace(",", " ");
 
                         builder.AppendLine(
                             $"{false},{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
@@ -125,7 +131,32 @@ namespace Benday.GitRepoSync.Api
                 {
                     var script = builder.ToString();
 
-                    WriteLine(script);
+                    if (Arguments.HasValue(Constants.ArgumentNameToFileName) == false)
+                    {
+                        // output to console
+                        WriteLine(script);
+                    }
+                    else
+                    {
+                        var toFileName = Arguments.GetStringValue(Constants.ArgumentNameToFileName);
+
+                        if (Path.IsPathFullyQualified(toFileName) == false)
+                        {
+                            toFileName = Path.Combine(Environment.CurrentDirectory, toFileName);
+                        }
+
+                        toFileName = Path.GetFullPath(toFileName);
+
+                        var directory = new DirectoryInfo(Path.GetDirectoryName(toFileName)!);
+
+                        if (directory.Exists == false)
+                        {
+                            directory.Create();
+                        }
+
+                        File.WriteAllText(toFileName, script);
+                        WriteLine($"Exported {numberOfReposFound} repos to config file '{toFileName}'.");
+                    }
                 }
             }
             else

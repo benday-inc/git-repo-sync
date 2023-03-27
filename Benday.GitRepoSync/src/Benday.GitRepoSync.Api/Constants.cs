@@ -24,6 +24,7 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameCategory = "category";
         public const string CodeDirVariable = "%%CodeDir%%";
         public const string ArgumentNameParallel = "parallel";
+        public const string ArgumentNameToFileName = "filename";
 
         public const string ArgumentNameConfigurationName = "config";
         public const string ArgumentNameToken = "pat";        

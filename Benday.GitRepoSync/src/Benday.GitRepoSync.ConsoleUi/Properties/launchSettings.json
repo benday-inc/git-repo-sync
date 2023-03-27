@@ -14,6 +14,11 @@
       "commandName": "Project",
       "commandLineArgs": "exportconfig /frompath:c:\\code\\benday-inc /codefolderpath:c:\\code /category:default",
       "workingDirectory": "C:\\code"
+    },
+    "exportconfig absolute path to path": {
+      "commandName": "Project",
+      "commandLineArgs": "exportconfig /frompath:c:\\code\\benday-inc /codefolderpath:c:\\code /category:default /filename:.\\outputdir\\repos.csv",
+      "workingDirectory": "C:\\code"
     }
   }
 }
