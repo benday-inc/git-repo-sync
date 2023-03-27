@@ -26,8 +26,6 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameParallel = "parallel";
 
         public const string ArgumentNameConfigurationName = "config";
-        public const string ArgumentNameToken = "pat";
-
-
+        public const string ArgumentNameToken = "pat";        
     }
 }

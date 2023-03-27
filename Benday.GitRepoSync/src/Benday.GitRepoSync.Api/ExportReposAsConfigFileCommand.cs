@@ -25,7 +25,7 @@ namespace Benday.GitRepoSync.Api
             var args = new ArgumentCollection();
 
             args.AddString(Constants.ArgumentNameFromPath)
-                .WithDescription("Starting path for search");
+                .WithDescription("Starting path for search. NOTE: this only checks immediate child directories.");
 
             args.AddString(Constants.ArgumentNameCodeFolderPath)
                 .WithDescription("Path for code directory. This becomes a variable in the config file.");
@@ -38,10 +38,25 @@ namespace Benday.GitRepoSync.Api
 
         protected override void OnExecute()
         {
-            string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
-
+            var baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
             var codeDirArgValue = Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath);
             var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
+            
+            if (Path.IsPathFullyQualified(baseDir) == false)
+            {
+                baseDir = Path.Combine(Environment.CurrentDirectory, baseDir);
+            }
+
+            if (Path.IsPathFullyQualified(codeDirArgValue) == false)
+            {
+                codeDirArgValue = Path.Combine(Environment.CurrentDirectory, codeDirArgValue);
+            }
+
+            baseDir = new DirectoryInfo(baseDir).FullName;
+            codeDirArgValue = new DirectoryInfo(codeDirArgValue).FullName;
+
+            WriteLine($"Base directory: {baseDir}");
+            WriteLine($"Code directory: {codeDirArgValue}");
 
             string baseDirFormattedForConfigFile = baseDir;
 
@@ -68,6 +83,8 @@ namespace Benday.GitRepoSync.Api
                 Console.WriteLine("INFO: Not replacing code folder with variable.");
             }
 
+            WriteLine("");
+
             StringBuilder builder = new();
 
             // header line
@@ -77,12 +94,16 @@ namespace Benday.GitRepoSync.Api
             {
                 var dirs = Directory.EnumerateDirectories(baseDir);
 
+                var numberOfReposFound = 0;
+
                 foreach (var dir in dirs)
                 {
                     var remote = GetGitRepoRemote(dir).Trim();
 
                     if (String.IsNullOrWhiteSpace(remote) == false)
                     {
+                        numberOfReposFound++;
+
                         var repoName = GetGitRepoName(remote).Replace("-", " ");
 
                         builder.AppendLine(
@@ -92,9 +113,20 @@ namespace Benday.GitRepoSync.Api
 
                 builder.AppendLine();
 
-                var script = builder.ToString();
+                if (numberOfReposFound == 0)
+                {
+                    WriteLine("");
+                    WriteLine($"** Didn't find any git repos in '{baseDir}'. " +
+                        $"Did you remember that this tool doesn't recurse directories? " +
+                        "It only looks at immediate " +
+                        "children of this directory.");
+                }
+                else
+                {
+                    var script = builder.ToString();
 
-                WriteLine(script);
+                    WriteLine(script);
+                }
             }
             else
             {
