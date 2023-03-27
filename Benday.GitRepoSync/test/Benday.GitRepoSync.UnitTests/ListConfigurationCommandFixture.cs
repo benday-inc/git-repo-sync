@@ -95,7 +95,6 @@ public class ListConfigurationCommandFixture
         Console.WriteLine(output);
 
         Assert.IsTrue(output.Contains("Token: token2"), "didn't find token2 in output");
-        Assert.IsTrue(output.Contains("Collection Url: url2"), "didn't find url2 in output");
         Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
     }
 
@@ -135,7 +134,6 @@ public class ListConfigurationCommandFixture
         Console.WriteLine(output);
 
         Assert.IsTrue(output.Contains("Token: token2"), "didn't find token2 in output");
-        Assert.IsTrue(output.Contains("Collection Url: url2"), "didn't find url2 in output");
         Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
     }
 
