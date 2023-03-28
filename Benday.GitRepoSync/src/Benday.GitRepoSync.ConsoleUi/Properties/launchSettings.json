@@ -1,0 +1,39 @@
+{
+  "profiles": {
+    "Benday.GitRepoSync.ConsoleUi": {
+      "commandName": "Project",
+      "commandLineArgs": "exportconfig /frompath:. /codefolderpath:. /category:default",
+      "workingDirectory": "C:\\code"
+    },
+    "exportconfig relative path": {
+      "commandName": "Project",
+      "commandLineArgs": "exportconfig /frompath:.\\benday-inc /codefolderpath:. /category:default",
+      "workingDirectory": "C:\\code"
+    },
+    "exportconfig absolute path": {
+      "commandName": "Project",
+      "commandLineArgs": "exportconfig /frompath:c:\\code\\benday-inc /codefolderpath:c:\\code /category:default",
+      "workingDirectory": "C:\\code"
+    },
+    "exportconfig absolute path to path": {
+      "commandName": "Project",
+      "commandLineArgs": "exportconfig /frompath:c:\\code\\benday-inc /codefolderpath:c:\\code /category:default /filename:.\\outputdir\\repos.csv",
+      "workingDirectory": "C:\\code"
+    },
+    "list repos with filters": {
+      "commandName": "Project",
+      "commandLineArgs": "listrepos /category:core",
+      "workingDirectory": "C:\\temp"
+    },
+    "add repo no args": {
+      "commandName": "Project",
+      "commandLineArgs": "addrepo",
+      "workingDirectory": "C:\\code\\github\\testrepo1"
+    },
+    "add repo with args": {
+      "commandName": "Project",
+      "commandLineArgs": "addrepo /name:blahblahblah /overwrite",
+      "workingDirectory": "C:\\code\\github\\testrepo1"
+    }
+  }
+}

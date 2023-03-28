@@ -96,18 +96,18 @@ To open your repo config file run `gitreposync openconfig`. That command probabl
 ## Commands
 | Command Name | Description |
 | --- | --- |
-| [addconfig](#addconfig) | Add or update an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [addrepo](#addrepo) | Add or update a repo to the list of configured repositories. NOTE: Repository URL is the unique identifier |
-| [exportconfig](#exportconfig) | Reads existing Git repositories and outputs configuration information to config file. |
-| [info](#info) | Gets the configuration info for the current repo |
-| [listconfig](#listconfig) | List an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [listcategories](#listcategories) | Lists the repository categories in the config file. |
-| [listrepos](#listrepos) | Reads config file and lists the configured repositories. |
-| [openconfig](#openconfig) | Open the repo configuration file in the default text editor |
-| [removeconfig](#removeconfig) | Remove an Azure DevOps configuration. For example, which server or account plus auth information. |
-| [removerepo](#removerepo) | Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier |
-| [update](#update) | Performs a 'git clone' or 'git pull' for each configured git repository. |
-## <a name="addconfig"></a> addconfig
+| addconfig | Add or update an Azure DevOps configuration. For example, which server or account plus auth information. |
+| addrepo | Add or update a repo to the list of configured repositories. NOTE: Repository URL is the unique identifier |
+| exportconfig | Reads existing Git repositories and outputs configuration information to config file. |
+| info | Gets the configuration info for the current repo |
+| listconfig | List an Azure DevOps configuration. For example, which server or account plus auth information. |
+| listcategories | Lists the repository categories in the config file. |
+| listrepos | Reads config file and lists the configured repositories. |
+| openconfig | Open the repo configuration file in the default text editor |
+| removeconfig | Remove an Azure DevOps configuration. For example, which server or account plus auth information. |
+| removerepo | Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier |
+| update | Performs a 'git clone' or 'git pull' for each configured git repository. |
+## addconfig
 **Add or update an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -115,7 +115,7 @@ To open your repo config file run `gitreposync openconfig`. That command probabl
 | config | Optional | String | Name of the configuration |
 | filename | Required | String | Configuration file path |
 | codedir | Required | String | Code directory value. Note: this is used as the code variable value  '%%CodeDir%%' in your config file. |
-## <a name="addrepo"></a> addrepo
+## addrepo
 **Add or update a repo to the list of configured repositories. NOTE: Repository URL is the unique identifier**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -127,7 +127,7 @@ To open your repo config file run `gitreposync openconfig`. That command probabl
 | overwrite | Optional | Boolean | Overwrites an existing repo config |
 | category | Optional | String | Category for the repository |
 | url | Optional | String | Repository URL value. NOTE: If not supplied, the repo URL for the current directory is used |
-## <a name="exportconfig"></a> exportconfig
+## exportconfig
 **Reads existing Git repositories and outputs configuration information to config file.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -136,25 +136,25 @@ To open your repo config file run `gitreposync openconfig`. That command probabl
 | codefolderpath | Required | String | Path for code directory. This becomes a variable in the config file. |
 | category | Required | String | Category name for this group of git repositories. |
 | filename | Optional | String | Writes configuration to file name |
-## <a name="info"></a> info
+## info
 **Gets the configuration info for the current repo**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
-## <a name="listconfig"></a> listconfig
+## listconfig
 **List an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Name of the configuration |
-## <a name="listcategories"></a> listcategories
+## listcategories
 **Lists the repository categories in the config file.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
-## <a name="listrepos"></a> listrepos
+## listrepos
 **Reads config file and lists the configured repositories.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
@@ -163,26 +163,26 @@ To open your repo config file run `gitreposync openconfig`. That command probabl
 | filter | Optional | String | Filter repos by partial string value |
 | category | Optional | String | Filter repos by category value. NOTE: this matches by full string |
 | quicksync | Optional | Boolean | Filter repos by 'quick sync' value |
-## <a name="openconfig"></a> openconfig
+## openconfig
 **Open the repo configuration file in the default text editor**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
-## <a name="removeconfig"></a> removeconfig
+## removeconfig
 **Remove an Azure DevOps configuration. For example, which server or account plus auth information.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Required | String | Name of the configuration |
-## <a name="removerepo"></a> removerepo
+## removerepo
 **Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
 | url | Optional | String | Repository URL value. NOTE: If not supplied, the repo URL for the current directory is used |
-## <a name="update"></a> update
+## update
 **Performs a 'git clone' or 'git pull' for each configured git repository.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
