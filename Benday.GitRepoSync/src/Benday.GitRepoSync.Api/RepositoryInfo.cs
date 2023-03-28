@@ -4,11 +4,10 @@ namespace Benday.GitRepoSync.Api
     public class RepositoryInfo
     {
         public bool IsQuickSync { get; set; }
-        public string Category { get; set; }
-        public string Description { get; set; }
-        public string ParentFolder { get; set; }
-        public string GitUrl { get; set; }
-        public string RepositoryName { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public string ParentFolder { get; set; } = string.Empty;
+        public string GitUrl { get; set; } = string.Empty;
+        public string RepositoryName { get; set; } = string.Empty;
 
         private bool ContainsFilterCaseInsensitive(string value, string filter)
         {
@@ -27,7 +26,6 @@ namespace Benday.GitRepoSync.Api
         public bool MatchesFilter(string filter)
         {
             return ContainsFilterCaseInsensitive(Category, filter) || 
-                ContainsFilterCaseInsensitive(Description, filter) || 
                 ContainsFilterCaseInsensitive(GitUrl, filter) || 
                 ContainsFilterCaseInsensitive(RepositoryName, filter);
         }

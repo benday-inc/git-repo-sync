@@ -111,9 +111,17 @@ namespace Benday.GitRepoSync.Api
             }
         }
 
-        private string GetConfigFilename()
+        protected string GetConfigFilename()
         {
             return GetPath(Configuration.ConfigurationFilePath);
+        }
+
+        protected string GetCodeDir()
+        {
+            var temp = GetPath(Configuration.CodeDirectoryValue);
+
+            if (Directory.Exists(temp) == false) { return temp; }
+            else { return new DirectoryInfo(temp).FullName; }
         }
 
         protected List<RepositoryInfo> GetRepositories()
@@ -197,12 +205,11 @@ namespace Benday.GitRepoSync.Api
                 {
                     IsQuickSync = ToBoolean(tokens[0]),
                     Category = tokens[1],
-                    Description = tokens[2],
+                    RepositoryName = tokens[2],
                     ParentFolder = tokens[3],
                     GitUrl = tokens[4]
                 };
-                temp.RepositoryName = GetGitRepoName(temp.GitUrl);
-
+                
                 return temp;
             }
         }
@@ -263,8 +270,7 @@ namespace Benday.GitRepoSync.Api
 
                 FileName = "git",
 
-                Arguments = "remotes",
-
+                Arguments = "remote -v",
                 CreateNoWindow = true,
 
                 UseShellExecute = false,
@@ -296,13 +302,54 @@ namespace Benday.GitRepoSync.Api
             }
         }
 
-    protected void WriteRepositoryInfo(RepositoryInfo repo)
-    {        
-        WriteLine($"Name       : {repo.RepositoryName}");
-        WriteLine($"Category   : {repo.Category}");
-        WriteLine($"Description: {repo.Description}");
-        WriteLine($"Quick Sync : {repo.IsQuickSync}");
-        WriteLine($"URL        : {repo.GitUrl}");
-    }
+        protected string GetGitRepoRootDirectory(string dir)
+        {
+            var temp = new ProcessStartInfo
+            {
+                WorkingDirectory = dir,
+
+                FileName = "git",
+
+                Arguments = "rev-parse --show-toplevel",
+
+                CreateNoWindow = true,
+
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+
+            var process = Process.Start(temp);
+
+            process.WaitForExit();
+
+            var output = process.StandardOutput.ReadLine();
+
+            if (output == null ||
+                output.Contains("not a git repository") == true) 
+            {
+                throw new KnownException($"Directory '{dir}' is not a git repository");
+            }
+            else
+            {
+                if (Environment.OSVersion.Platform == PlatformID.Unix)
+                {
+                    return output;
+                }
+                else
+                {
+                    output = output.Replace('/', '\\');
+                    return output;
+                }                
+            }
+        }
+
+        protected void WriteRepositoryInfo(RepositoryInfo repo)
+        {
+            WriteLine($"Name         : {repo.RepositoryName}");
+            WriteLine($"Category     : {repo.Category}");
+            WriteLine($"Quick Sync   : {repo.IsQuickSync}");
+            WriteLine($"URL          : {repo.GitUrl}");
+            WriteLine($"Parent Folder: {repo.ParentFolder}");
+        }
     }
 }

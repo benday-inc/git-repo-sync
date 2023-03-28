@@ -29,13 +29,13 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameOverwrite = "overwrite";
         public const string ArgumentNameCategory = "category";
         public const string ArgumentNameRepoName = "name";
-        public const string ArgumentNameRepoDesc = "desc";
         public const string ArgumentNameRepoUrl = "url";
         public const string ArgumentNameCategoryFilterExactMatch = "categoryexact";
         public const string ArgumentNameFilter = "filter";
         public const string CodeDirVariable = "%%CodeDir%%";
         public const string ArgumentNameParallel = "parallel";
         public const string ArgumentNameToFileName = "filename";
+        public const string ArgumentNameParentDir = "parentdir";
 
         public const string ArgumentNameConfigurationName = "config";
         public const string ArgumentNameConfigurationFile = "filename";        

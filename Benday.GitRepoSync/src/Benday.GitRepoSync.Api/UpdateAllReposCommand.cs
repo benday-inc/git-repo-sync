@@ -136,11 +136,11 @@ namespace Benday.GitRepoSync.Api
         {
             if (isQuickSyncMode == true && repo.IsQuickSync == false)
             {
-                WriteLine($"Quick sync is skipping repo {currentNumber} of {totalCount}: {repo.Description}...");
+                WriteLine($"Quick sync is skipping repo {currentNumber} of {totalCount}: {repo.RepositoryName}...");
             }
             else
             {
-                WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.Description}...");
+                WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.RepositoryName}...");
 
                 var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
 
@@ -159,7 +159,7 @@ namespace Benday.GitRepoSync.Api
 
         private void CloneRepo(RepositoryInfo repo, string parentFolder)
         {
-            WriteLine($"Cloning {repo.Description} into {parentFolder}...");
+            WriteLine($"Cloning {repo.RepositoryName} into {parentFolder}...");
 
             if (Directory.Exists(parentFolder) == false)
             {
@@ -177,7 +177,7 @@ namespace Benday.GitRepoSync.Api
 
         private void SyncRepo(RepositoryInfo repo, string repoFolder)
         {
-            WriteLine($"Getting changes for {repo.Description}...");
+            WriteLine($"Getting changes for {repo.RepositoryName}...");
 
             var pullCommand = new ProcessStartInfo("git",
                 $"pull")
@@ -239,7 +239,7 @@ namespace Benday.GitRepoSync.Api
                 {
                     IsQuickSync = ToBoolean(tokens[0]),
                     Category = tokens[1],
-                    Description = tokens[2],
+                    RepositoryName = tokens[2],
                     ParentFolder = tokens[3],
                     GitUrl = tokens[4]
                 };

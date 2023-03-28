@@ -32,11 +32,11 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
 
         args.AddString(Constants.ArgumentNameRepoName)
             .AsNotRequired()
-            .WithDescription("Name for the repository");
+            .WithDescription("Human readable name for the repository");
 
-        args.AddString(Constants.ArgumentNameRepoDesc)
+        args.AddString(Constants.ArgumentNameParentDir)
             .AsNotRequired()
-            .WithDescription("Description for the repository");
+            .WithDescription("Parent directory for this repository. Essentially, where do you want this on disk?");
 
         args.AddBoolean(Constants.ArgumentNameQuickSync)
             .AsNotRequired()
@@ -64,6 +64,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         ValidateConfiguration();
 
         string repositoryUrl;
+        string parentDirectory;
 
         if (Arguments.HasValue(Constants.ArgumentNameRepoUrl) == false)
         {
@@ -73,9 +74,22 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
             {
                 throw new KnownException($"Current directory is not a git repository.");
             }
+
+            parentDirectory = GetGitRepoRootDirectory(Environment.CurrentDirectory);
         }
         else
         {
+            if (Arguments.HasValue(Constants.ArgumentNameParentDir) == false)
+            {
+                throw new KnownException($"You must specify a value for /{Constants.ArgumentNameParentDir} " +
+                    $"when you use the /{Constants.ArgumentNameRepoUrl} argument.");
+            }
+            else
+            {
+                parentDirectory =
+                    Arguments.GetStringValue(Constants.ArgumentNameParentDir);
+            }
+
             repositoryUrl =
                 Arguments.GetStringValue(Constants.ArgumentNameRepoUrl);
         }
@@ -90,10 +104,10 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         List<RepositoryInfo> repos = GetRepositories();
 
         var repo = repos.Where(r => string.Equals(
-            r.GitUrl, repositoryUrl, 
+            r.GitUrl, repositoryUrl,
             StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
-        if (repo != null && 
+        if (repo != null &&
             Arguments.GetBooleanValue(Constants.ArgumentNameOverwrite) == false)
         {
             WriteLine("*** REPOSITORY ALREADY CONFIGURED ***");
@@ -105,21 +119,30 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         {
             // modify existing
 
-            UpdateExistingRepositoryInfo(repo, repositoryUrl);
+            UpdateExistingRepositoryInfo(repo, repositoryUrl, parentDirectory);
+
+            WriteLine("*** UPDATING REPOSITORY ***");
         }
         else
         {
             repo = new RepositoryInfo();
 
-            PopulateNewRepositoryInfo(repo, repositoryUrl);
+            PopulateNewRepositoryInfo(repo, repositoryUrl, parentDirectory);
 
             repos.Add(repo);
+
+            WriteLine("*** ADDING REPOSITORY ***");
         }
 
-        WriteLine("*** SAVE TO CONFIG FILE NOT IMPLEMENTED ***");
+        
+        WriteRepositoryInfo(repo);
+
+        WriteToDisk(repos);
     }
 
-    private void PopulateNewRepositoryInfo(RepositoryInfo match, string repositoryUrl)
+    private void PopulateNewRepositoryInfo(RepositoryInfo match,
+        string repositoryUrl,
+        string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
@@ -141,25 +164,34 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
             match.Category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
         }
 
-        if (Arguments.HasValue(Constants.ArgumentNameRepoDesc) == false)
-        {
-            match.Description = match.RepositoryName;
-        }
-        else
-        {
-            match.Description = Arguments.GetStringValue(Constants.ArgumentNameRepoDesc);
-        }
-
         match.IsQuickSync = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
+
+        match.ParentFolder = EscapeParentDirectory(parentDirectory);
     }
 
-    private void UpdateExistingRepositoryInfo(RepositoryInfo match, string repositoryUrl)
+    private string EscapeParentDirectory(string parentDirectory)
+    {
+        var dir = new DirectoryInfo(parentDirectory);
+
+        var parentDir = dir.Parent.FullName;
+        var codeDir = GetCodeDir();
+
+        var parentDirNameEscaped = parentDir.Replace(codeDir,
+            Constants.CodeDirVariable,
+            StringComparison.CurrentCultureIgnoreCase);
+
+        return parentDirNameEscaped;
+    }
+
+    private void UpdateExistingRepositoryInfo(RepositoryInfo match,
+        string repositoryUrl,
+        string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
         if (Arguments.HasValue(Constants.ArgumentNameRepoName) == true)
         {
-            match.RepositoryName = 
+            match.RepositoryName =
                 Arguments.GetStringValue(Constants.ArgumentNameRepoName);
         }
 
@@ -168,14 +200,50 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
             match.Category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
         }
 
-        if (Arguments.HasValue(Constants.ArgumentNameRepoDesc) == true)
-        {
-            match.Description = Arguments.GetStringValue(Constants.ArgumentNameRepoDesc);
-        }
-
         if (Arguments.HasValue(Constants.ArgumentNameQuickSync) == true)
         {
             match.IsQuickSync = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
         }
+
+        match.ParentFolder = EscapeParentDirectory(parentDirectory);
+    }
+
+    private void WriteToDisk(List<RepositoryInfo> repos)
+    {
+
+        WriteToDisk(repos, GetConfigFilename());
+    }
+
+    private void WriteToDisk(List<RepositoryInfo> repos, string filename)
+    {
+        if (File.Exists(filename) == false)
+        {
+            var info = new FileInfo(filename);
+
+            var dir = info.Directory;
+
+            if (dir.Exists == false)
+            {
+                dir.Create();
+            }
+        }
+
+        StringBuilder builder = new();
+
+        // header line
+        builder.AppendLine("quicksync,category,description,parent folder,giturl");
+
+
+        foreach (var repo in repos)
+        {           
+            builder.AppendLine(
+            $"{repo.IsQuickSync}," +
+            $"{repo.Category.Replace(",", " ")}," +
+            $"{repo.RepositoryName.Replace(",", " ")}," +
+            $"{repo.ParentFolder.Replace('\\', '/')}," +
+            $"{repo.GitUrl}");
+        }
+
+        File.WriteAllText(filename, builder.ToString());
     }
 }
