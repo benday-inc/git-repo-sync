@@ -29,6 +29,10 @@ namespace Benday.GitRepoSync.Api
                 .AsNotRequired()
                 .WithDescription("Configuration name to use");
 
+            args.AddString(Constants.ArgumentNameCategory)
+    .AsNotRequired()
+    .WithDescription("Category of repos to sync");
+
             /*
             args.AddString(Constants.ArgumentNameConfigFile)
                 .WithDescription("Path to configuration file");
@@ -37,7 +41,64 @@ namespace Benday.GitRepoSync.Api
                 .WithDescription("Path for code directory variable in the config file.");
             */
 
+            args.AddBoolean(Constants.ArgumentNameListCategories)
+                .AsNotRequired()
+                .AllowEmptyValue()
+                .WithDescription("Lists the categories in the config file");
+
+            args.AddBoolean(Constants.ArgumentNameQuickSync)
+                .AsNotRequired()
+                .AllowEmptyValue()
+                .WithDescription("Sync only repos that are marked as 'quick sync'");
+
+            args.AddBoolean(Constants.ArgumentNameParallel)
+                .AsNotRequired()
+                .AllowEmptyValue()
+                .WithDescription("EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess.");
+
             return args;
+        }
+
+        private GitRepoSyncConfiguration? _Configuration;
+
+        protected GitRepoSyncConfiguration Configuration
+        {
+            get
+            {
+                if (_Configuration == null)
+                {
+                    var configName = GetConfigurationName();
+
+                    var temp =
+                        GitRepoSyncConfigurationManager.Instance.Get(configName);
+
+                    if (temp == null)
+                    {
+                        throw new KnownException($"Could not find a configuration named '{configName}'. Add a configuration and try again.");
+                    }
+
+                    _Configuration = temp;
+                }
+
+                return _Configuration;
+            }
+
+            set => _Configuration = value;
+        }
+
+        protected string GetConfigurationName()
+        {
+            if (Arguments.ContainsKey(Constants.ArgumentNameConfigurationName) == true &&
+                Arguments[Constants.ArgumentNameConfigurationName].HasValue)
+            {
+                var configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
+
+                return configName;
+            }
+            else
+            {
+                return Constants.DefaultConfigurationName;
+            }
         }
 
 
@@ -45,8 +106,11 @@ namespace Benday.GitRepoSync.Api
         {
             ValidateArguments();
 
-            var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
-            var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
+            //var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
+            //var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
+
+            var configFilename = GetPath(Arguments.GetStringValue(Configuration.ConfigurationFilePath));
+            var codeFolderPath = GetPath(Arguments.GetStringValue(Configuration.CodeDirectoryValue));
 
             var listCategoriesMode = Arguments.HasValue(Constants.ArgumentNameListCategories);
             var hasCategoryFilter = Arguments.HasValue(Constants.ArgumentNameCategory);
