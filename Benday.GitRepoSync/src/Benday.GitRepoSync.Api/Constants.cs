@@ -24,6 +24,7 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameCodeFolderPath = "codefolderpath";
         public const string ArgumentNameQuickSync = "quicksync";
         public const string ArgumentNameCategory = "category";
+        public const string ArgumentNameCategoryFilterExactMatch = "categoryexact";
         public const string ArgumentNameFilter = "filter";
         public const string CodeDirVariable = "%%CodeDir%%";
         public const string ArgumentNameParallel = "parallel";

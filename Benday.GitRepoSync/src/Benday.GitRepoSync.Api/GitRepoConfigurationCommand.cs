@@ -142,6 +142,42 @@ namespace Benday.GitRepoSync.Api
             return returnValues;
         }
 
+        /// <summary>
+        /// Gets a list of repositories from the config file optionally 
+        /// filtered by command line filter options.
+        /// /filter:string, /quicksync, and/or /category:string
+        /// </summary>
+        /// <returns></returns>
+        protected List<RepositoryInfo> GetMatchingRepositories()
+        {
+            var filterMode = Arguments.HasValue(Constants.ArgumentNameFilter);
+            var filter = Arguments.GetStringValue(Constants.ArgumentNameFilter);
+            var categoryFilterMode = Arguments.HasValue(Constants.ArgumentNameCategory);
+            var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
+
+            bool isQuickSyncMode = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
+
+            var repos = GetRepositories();
+
+            if (categoryFilterMode == true)
+            {
+                repos = repos.Where(r => string.Equals(r.Category, category,
+                    StringComparison.CurrentCultureIgnoreCase)).ToList();
+            }
+
+            if (filterMode == true)
+            {
+                repos = repos.Where(r => r.MatchesFilter(filter)).ToList();
+            }
+
+            if (isQuickSyncMode == true)
+            {
+                repos = repos.Where(r => r.IsQuickSync).ToList();
+            }
+
+            return repos;
+        }
+
         private RepositoryInfo GetRepository(string line)
         {
             var tokens = line.Split(',');

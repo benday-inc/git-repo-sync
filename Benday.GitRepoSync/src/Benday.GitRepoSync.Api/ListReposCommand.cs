@@ -31,12 +31,16 @@ public class ListReposCommand : GitRepoConfigurationCommand
 
         args.AddString(Constants.ArgumentNameFilter)
             .AsNotRequired()
-            .WithDescription("Filter repos by string value");
+            .WithDescription("Filter repos by partial string value");
+
+        args.AddString(Constants.ArgumentNameCategory)
+            .AsNotRequired()
+            .WithDescription("Filter repos by category value. NOTE: this matches by full string");
 
         args.AddBoolean(Constants.ArgumentNameQuickSync)
             .AsNotRequired()
             .AllowEmptyValue()
-            .WithDescription("Show repos that are marked as 'quick sync'");
+            .WithDescription("Filter repos by 'quick sync' value");
 
         return args;
     }
@@ -45,23 +49,8 @@ public class ListReposCommand : GitRepoConfigurationCommand
     protected override void OnExecute()
     {
         ValidateConfiguration();
-                
-        var filterMode = Arguments.HasValue(Constants.ArgumentNameFilter);
-        var filter = Arguments.GetStringValue(Constants.ArgumentNameFilter);
 
-        bool isQuickSyncMode = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
-        
-        var repos = GetRepositories();
-
-        if (isQuickSyncMode == true)
-        {
-            repos = repos.Where(r => r.IsQuickSync).ToList();
-        }
-
-        if (filterMode == true)
-        {
-            repos = repos.Where(r => r.MatchesFilter(filter)).ToList();
-        }
+        List<RepositoryInfo> repos = GetMatchingRepositories();
 
         var count = repos.Count();
 
@@ -81,11 +70,12 @@ public class ListReposCommand : GitRepoConfigurationCommand
             WriteLine($"URL        : {repo.GitUrl}");
             WriteLine(string.Empty);
         }
-    }     
-
-
-    
-
+    }
 
     
+
+
+
+
+
 }
