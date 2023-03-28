@@ -15,7 +15,7 @@ namespace Benday.GitRepoSync.Api;
 [Command(Name = Constants.CommandArgumentNameListRepos,
     IsAsync = false,
     Description = "Reads config file and lists the configured repositories.")]
-public class ListReposCommand : GitRepoConfigurationCommand
+public class ListReposCommand : GitRepoConfigurationCommandBase
 {
     public ListReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
            base(info, outputProvider)
@@ -29,19 +29,8 @@ public class ListReposCommand : GitRepoConfigurationCommand
 
         AddCommonArguments(args);
 
-        args.AddString(Constants.ArgumentNameFilter)
-            .AsNotRequired()
-            .WithDescription("Filter repos by partial string value");
-
-        args.AddString(Constants.ArgumentNameCategory)
-            .AsNotRequired()
-            .WithDescription("Filter repos by category value. NOTE: this matches by full string");
-
-        args.AddBoolean(Constants.ArgumentNameQuickSync)
-            .AsNotRequired()
-            .AllowEmptyValue()
-            .WithDescription("Filter repos by 'quick sync' value");
-
+        AddRepoFilters(args);
+        
         return args;
     }
 
@@ -61,21 +50,9 @@ public class ListReposCommand : GitRepoConfigurationCommand
         foreach (var repo in repos)
         {
             index++;
-
             WriteLine($"*** REPOSITORY {index} ***");
-            WriteLine($"Name       : {repo.RepositoryName}");
-            WriteLine($"Category   : {repo.Category}");
-            WriteLine($"Description: {repo.Description}");
-            WriteLine($"Quick Sync : {repo.IsQuickSync}");
-            WriteLine($"URL        : {repo.GitUrl}");
+            WriteRepositoryInfo(repo);
             WriteLine(string.Empty);
         }
     }
-
-    
-
-
-
-
-
 }

@@ -13,7 +13,7 @@ namespace Benday.GitRepoSync.Api
     [Command(Name = Constants.CommandArgumentNameUpdateAllRepos,
         IsAsync = false,
         Description = "Reads existing Git repositories and outputs configuration information to config file.")]
-    public class UpdateAllReposCommand : GitRepoConfigurationCommand
+    public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
     {
         public UpdateAllReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
                base(info, outputProvider)

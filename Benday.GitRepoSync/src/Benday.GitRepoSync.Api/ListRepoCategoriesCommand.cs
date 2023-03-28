@@ -10,7 +10,7 @@ namespace Benday.GitRepoSync.Api;
 [Command(Name = Constants.CommandArgumentNameListCategories,
     IsAsync = false,
     Description = "Lists the repository categories in the config file.")]
-public class ListRepoCategoriesCommand : GitRepoConfigurationCommand
+public class ListRepoCategoriesCommand : GitRepoConfigurationCommandBase
 {
     public ListRepoCategoriesCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
            base(info, outputProvider)

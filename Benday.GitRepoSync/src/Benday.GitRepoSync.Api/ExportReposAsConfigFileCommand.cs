@@ -12,7 +12,7 @@ namespace Benday.GitRepoSync.Api
     [Command(Name = Constants.CommandArgumentNameExportReposAsConfigFile,
         IsAsync = false,
         Description = "Reads existing Git repositories and outputs configuration information to config file.")]
-    public class ExportReposAsConfigFileCommand : SynchronousCommand
+    public class ExportReposAsConfigFileCommand : GitRepoConfigurationCommandBase
     {
         public ExportReposAsConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
                base(info, outputProvider)
@@ -162,67 +162,6 @@ namespace Benday.GitRepoSync.Api
             else
             {
                 throw new KnownException($"Base directory '{baseDir}' does not exist.");
-            }
-        }
-
-        private static string GetGitRepoName(string gitRepoUrl)
-        {
-            var repoUri = new Uri(gitRepoUrl);
-
-            var lastToken = repoUri.Segments.Last();
-
-            if (String.IsNullOrWhiteSpace(lastToken) == true)
-            {
-                return String.Empty;
-            }
-            else if (lastToken.EndsWith(".git") == true)
-            {
-                return lastToken.Replace(".git", String.Empty);
-            }
-            else
-            {
-                return lastToken;
-            }
-        }
-
-        private static string GetGitRepoRemote(string dir)
-        {
-            var temp = new ProcessStartInfo
-            {
-                WorkingDirectory = dir,
-
-                FileName = "git",
-
-                Arguments = "remotes",
-
-                CreateNoWindow = true,
-
-                UseShellExecute = false,
-                RedirectStandardOutput = true
-            };
-
-            var process = Process.Start(temp);
-
-            process.WaitForExit();
-
-            var output = process.StandardOutput.ReadLine();
-
-            if (output != null)
-            {
-                output = output.Replace("origin	", String.Empty).Replace(" (fetch)", String.Empty);
-
-                if (output.Contains('\t') == true)
-                {
-                    var tokens = output.Split('\t');
-
-                    output = tokens.Last();
-                }
-
-                return output;
-            }
-            else
-            {
-                return string.Empty;
             }
         }
     }

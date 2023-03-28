@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api
 {
-    public abstract class GitRepoConfigurationCommand : SynchronousCommand
+    public abstract class GitRepoConfigurationCommandBase : SynchronousCommand
     {
-        public GitRepoConfigurationCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
+        public GitRepoConfigurationCommandBase(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
                base(info, outputProvider)
         {
 
@@ -237,5 +238,71 @@ namespace Benday.GitRepoSync.Api
                 return lastToken;
             }
         }
+
+        public static void AddRepoFilters(ArgumentCollection args)
+        {
+            args.AddString(Constants.ArgumentNameFilter)
+                        .AsNotRequired()
+                        .WithDescription("Filter repos by partial string value");
+
+            args.AddString(Constants.ArgumentNameCategory)
+                .AsNotRequired()
+                .WithDescription("Filter repos by category value. NOTE: this matches by full string");
+
+            args.AddBoolean(Constants.ArgumentNameQuickSync)
+                .AsNotRequired()
+                .AllowEmptyValue()
+                .WithDescription("Filter repos by 'quick sync' value");
+        }
+
+        protected string GetGitRepoRemote(string dir)
+        {
+            var temp = new ProcessStartInfo
+            {
+                WorkingDirectory = dir,
+
+                FileName = "git",
+
+                Arguments = "remotes",
+
+                CreateNoWindow = true,
+
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+
+            var process = Process.Start(temp);
+
+            process.WaitForExit();
+
+            var output = process.StandardOutput.ReadLine();
+
+            if (output != null)
+            {
+                output = output.Replace("origin	", String.Empty).Replace(" (fetch)", String.Empty);
+
+                if (output.Contains('\t') == true)
+                {
+                    var tokens = output.Split('\t');
+
+                    output = tokens.Last();
+                }
+
+                return output;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+    protected void WriteRepositoryInfo(RepositoryInfo repo)
+    {        
+        WriteLine($"Name       : {repo.RepositoryName}");
+        WriteLine($"Category   : {repo.Category}");
+        WriteLine($"Description: {repo.Description}");
+        WriteLine($"Quick Sync : {repo.IsQuickSync}");
+        WriteLine($"URL        : {repo.GitUrl}");
+    }
     }
 }
