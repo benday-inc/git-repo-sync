@@ -92,3 +92,37 @@ format. The CSV data is printed to the console -- it does NOT actually update yo
 need to manually copy the CSV data into your repo config file.  
 
 To open your repo config file run `gitreposync openconfig`. That command probably opens the repo config file in text editor but you might find that it's helpful to open that config file in Excel.  
+
+## Getting Started: Sync All Your Git Repositories
+
+Once you have your repository config file set up, you can start bringing down your code. To do this, you'll run `gitreposync update`.
+That command will perform either a git clone or a git pull to make sure that you have the latest code on your machine.
+
+### Quick Sync
+There are probably some repositories that you work with all the time and that have frequent changes. 
+You can mark a configured git repository as a 'quick sync' repository using `gitreposync addrepo /quicksync`. 
+
+To update just your quick sync repositories, run `gitreposync update /quicksync`
+
+### Category
+You can also organize your repositories by category. You can set the category for a repository using `gitreposync addrepo /category:{category-name}`. 
+
+To update just your quick sync repositories, run `gitreposync update /category:{category-name}`
+
+FYI, the category filter matches by the exact category name not the partial category name.
+
+### Filter
+Sometimes you want to update repositories by name. To do this, you can specify a filter.
+
+To update your git repositories using a filter, run `gitreposync update /filter:{value}`. It will search the configured 
+git repositories and clone/pull anything that contains the filter value in the name, category, or URL.
+
+### Combining filters and options
+Yes, you can combine these filters and options.  
+
+### Experimental: Multithreaded Sync
+Feeling impatient?  Don't care that the messages displayed in the tool might be kind of a mess?  Try running `gitreposync update /parallel` 
+to run the update command in multi-threaded mode.  I guarantee that the displayed messages will be a complete mess...but since it runs 
+using multiple cores/processors, it'll probably run a bit faster.  
+
+
