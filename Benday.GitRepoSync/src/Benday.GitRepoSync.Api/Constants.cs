@@ -14,6 +14,7 @@ namespace Benday.GitRepoSync.Api
         public const string CommandArgumentNameRemoveRepo = "removerepo";
         public const string CommandArgumentNameGetRepoInfo = "info";
         public const string CommandArgumentNameListCategories = "listcategories";
+        public const string CommandArgumentNameOpenRepoConfigFile = "openconfig";
 
         public const string ConfigFileName = "gitreposync-config.json";
         public const string DefaultConfigurationName = "(default)";
