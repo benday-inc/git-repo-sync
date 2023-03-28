@@ -143,6 +143,7 @@ public class GitRepoSyncConfigurationManager
         if (match != null)
         {
             configurations.Remove(match);
+            configurations.Add(config);
         }
         else
         {

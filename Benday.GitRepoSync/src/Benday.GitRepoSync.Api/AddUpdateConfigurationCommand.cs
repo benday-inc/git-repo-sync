@@ -5,7 +5,7 @@ namespace Benday.GitRepoSync.Api;
 [Command(Name = Constants.CommandArgumentNameAddUpdateConfig,
         Description = "Add or update an Azure DevOps configuration. For example, which server or account plus auth information.",
         IsAsync = false)]
-public class AddUpdateConfigurationCommand : SynchronousCommand
+public class AddUpdateConfigurationCommand : GitRepoConfigurationCommandBase
 {
     public AddUpdateConfigurationCommand(
         CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(info, outputProvider)
@@ -42,8 +42,8 @@ public class AddUpdateConfigurationCommand : SynchronousCommand
 
         var config = new GitRepoSyncConfiguration()
         {
-            ConfigurationFilePath = Arguments[Constants.ArgumentNameConfigurationFile].Value,
-            CodeDirectoryValue = Arguments[Constants.ArgumentNameCodeDirectory].Value,
+            ConfigurationFilePath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigurationFile)),
+            CodeDirectoryValue = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeDirectory)),
             Name = configName
         };
 
