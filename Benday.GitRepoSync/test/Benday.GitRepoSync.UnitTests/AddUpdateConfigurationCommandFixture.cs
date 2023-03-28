@@ -65,7 +65,7 @@ public class AddUpdateConfigurationCommandFixture
         Utilities.AssertFileDoesNotExist(ConfigurationManager.PathToConfigurationFile);
 
         var expectedConfigurationName = "config123";
-        var expectedToken = "token-value";
+        var expectedToken = Environment.CurrentDirectory;
         var expectedCodeDir = "c:\\code";
 
         var commandLineArgs = Utilities.GetStringArray(
@@ -100,7 +100,7 @@ public class AddUpdateConfigurationCommandFixture
         Utilities.AssertFileDoesNotExist(ConfigurationManager.PathToConfigurationFile);
 
         var expectedConfigurationName = Constants.DefaultConfigurationName;
-        var expectedToken = "token-value";
+        var expectedToken = Environment.CurrentDirectory;
         var expectedCodeDir = "c:\\code";
 
         var commandLineArgs = Utilities.GetStringArray(
