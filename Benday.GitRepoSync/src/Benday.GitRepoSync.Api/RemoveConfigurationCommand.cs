@@ -1,0 +1,30 @@
+﻿using Benday.CommandsFramework;
+
+namespace Benday.GitRepoSync.Api;
+
+[Command(Name = Constants.CommandArgumentNameRemoveConfig,
+        Description = "Remove an Azure DevOps configuration. For example, which server or account plus auth information.",
+        IsAsync = false)]
+public class RemoveConfigurationCommand : SynchronousCommand
+{
+    public RemoveConfigurationCommand(
+        CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(info, outputProvider)
+    {
+    }
+
+    public override ArgumentCollection GetArguments()
+    {
+        var arguments = new ArgumentCollection();
+
+        arguments.AddString(Constants.ArgumentNameConfigurationName)
+            .WithDescription("Name of the configuration")
+            .AsRequired();
+
+        return arguments;
+    }
+
+    protected override void OnExecute()
+    {
+        GitRepoSyncConfigurationManager.Instance.Remove(Arguments[Constants.ArgumentNameConfigurationName].Value);
+    }
+}

@@ -1,16 +1,44 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<None Include="..\..\..\bdc_mark_128_128.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\..\README-for-nuget.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Benday.CommandsFramework" Version="2.0.0" />
+		<PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
+	</ItemGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>gitreposync</Title>
+		<Authors>benday</Authors>
+		<Copyright>2023</Copyright>
+		<PackageIcon>bdc_mark_128_128.png</PackageIcon>
+		<PackageReadmeFile>README-for-nuget.md</PackageReadmeFile>
+		<PackAsTool>True</PackAsTool>
+		
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
-  </ItemGroup>
+		<PackageProjectUrl>https://github.com/benday-inc/git-repo-sync</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-  <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-  </ItemGroup>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <AssemblyName>gitreposync</AssemblyName>
+		<Version>$(VersionPrefix)2.0.0</Version>
+		<Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-
+	</PropertyGroup>
 </Project>
