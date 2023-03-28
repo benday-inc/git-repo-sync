@@ -32,17 +32,33 @@ The gitreposync is distributed as a .NET Core Tool via NuGet. To install it go t
 ### Prerequisites
 - You'll need to install .NET Core 7 from https://dotnet.microsoft.com/
 
-## Getting Started
+## Getting Started: Configuration
 Everything starts with a configuration. After you've installed gitreposync, you'll need to 
-run `gitreposync addconfig` to add a configuration. A configuration is how you store the URL for your Azure DevOps instance and the personal access token (PAT) for authenticating to that instance.  
+run `gitreposync addconfig` to add a configuration. Each configuration has a list of git repositories and a source code directory. 
 
 Configurations are named and you can have as many as you'd like.
 
+### Suggestion: Put your repo config file into a cloud storage provider
+I think you're going to want to use your repo config file (aka. your list of repositories) across multiple machines.
+My suggestion is that you create that file in a directory that's sync to a cloud storage provider like OneDrive or Dropbox.
+
+### Why does the tool ask you for a source code diretory?
+This tool is meant to be usable across OS platforms. The directory path where you store your source code is
+going to be completely different if you're working on Windows, Mac, or Linux -- but the list of git repositories that you 
+care about is probably the same.  
+
+My guess is that you'll put your config file into a cloud storage provider like OneDrive or Dropbox.
+
+When you add a git repository to the configuration, the source code directory value for that repo gets replaced with a 
+variable ('%%CODE_DIR%%'). When you do a `gitreposync update`, the local version of the code directory automatically
+set into that code dir variable so that you can share a repo config file across multiple machines and operating systems 
+without having to change your config file.
+
 ### Set a Default Configuration
-There's one default configuration named `(default)`. If you only work with one Azure DevOps instance, then all you'll need to do is to is run `gitreposync addconfig /url:{url} /pat:{pat}` and that will set your default configuration. 
+There's one default configuration named `(default)`. If you only work with one Azure DevOps instance, then all you'll need to do is to is run `gitreposync addconfig /codedir:c:\code /filename:c:\onedrive\gitreposync\gitreposync.csv` and that will set your default configuration. 
 
 ### Additional Named Configurations
-If you want to add additional named configurations, you'll run `gitreposync addconfig /config:{name} /url:{url} /pat:{pat}`. 
+If you want to add additional named configurations, you'll run `gitreposync addconfig /config:{name} ...`. 
 
 ### Running Commands
 Once you've set a default configuration, you can run any gitreposync command without having to specify any additional URL or PAT info.  
@@ -51,3 +67,28 @@ If you want to run a command against an Azure DevOps instance that is NOT your d
 
 ### Managing Configurations
 To add new configuration or modify an existing configuration, use the `gitreposync addconfig` command. You can list your configurations using the `gitreposync listconfig` command. To delete a configuration, use the `gitreposync removeconfig` command.
+
+## Getting Started: Scripting Your Current Git Repository Tree
+
+Once you've run `gitreposync addconfig` and set up your config file path, you can start adding repositories to your config.
+You can either do that one repo at a time using `gitreposync addrepo` or in bulk.
+
+### Add one repository
+
+This is the easiest way to get going. Open a terminal (aka. command prompt) window and `cd` to your git repo directory.
+Let's say that your git repository is in `c:\code\my-git-repo`. Once you've done `cd \code\my-git-repo`, you can run
+`gitreposync addrepo` and the tool will automatically add that repo to the config.
+
+There are additional options such as quick sync and category that you also might want to configure.  The `addrepo` command
+can be run multiple times and it will update the config for your repo.
+
+To view the additional options, run `gitreposync addrepo --help`.
+
+### Add multiple repositories
+
+If you're scripting a lot of git repositories that are already on disk, you can run `gitreposync exportconfig`. This command 
+will look at all the child directories under your current directory and export the repo config in comma-separated value (CSV)
+format. The CSV data is printed to the console -- it does NOT actually update your repo config file.  Put another way, you'll
+need to manually copy the CSV data into your repo config file.  
+
+To open your repo config file run `gitreposync openconfig`. That command probably opens the repo config file in text editor but you might find that it's helpful to open that config file in Excel.  
