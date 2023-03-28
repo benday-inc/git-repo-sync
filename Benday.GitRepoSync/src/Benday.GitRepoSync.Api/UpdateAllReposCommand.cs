@@ -13,7 +13,7 @@ namespace Benday.GitRepoSync.Api
     [Command(Name = Constants.CommandArgumentNameUpdateAllRepos,
         IsAsync = false,
         Description = "Reads existing Git repositories and outputs configuration information to config file.")]
-    public class UpdateAllReposCommand : SynchronousCommand
+    public class UpdateAllReposCommand : GitRepoConfigurationCommand
     {
         public UpdateAllReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
                base(info, outputProvider)
@@ -25,13 +25,11 @@ namespace Benday.GitRepoSync.Api
         {
             var args = new ArgumentCollection();
 
-            args.AddString(Constants.ArgumentNameConfigurationName)
-                .AsNotRequired()
-                .WithDescription("Configuration name to use");
+            AddCommonArguments(args);
 
             args.AddString(Constants.ArgumentNameCategory)
-    .AsNotRequired()
-    .WithDescription("Category of repos to sync");
+                .AsNotRequired()
+                .WithDescription("Category of repos to sync");
 
             /*
             args.AddString(Constants.ArgumentNameConfigFile)
@@ -59,52 +57,10 @@ namespace Benday.GitRepoSync.Api
             return args;
         }
 
-        private GitRepoSyncConfiguration? _Configuration;
-
-        protected GitRepoSyncConfiguration Configuration
-        {
-            get
-            {
-                if (_Configuration == null)
-                {
-                    var configName = GetConfigurationName();
-
-                    var temp =
-                        GitRepoSyncConfigurationManager.Instance.Get(configName);
-
-                    if (temp == null)
-                    {
-                        throw new KnownException($"Could not find a configuration named '{configName}'. Add a configuration and try again.");
-                    }
-
-                    _Configuration = temp;
-                }
-
-                return _Configuration;
-            }
-
-            set => _Configuration = value;
-        }
-
-        protected string GetConfigurationName()
-        {
-            if (Arguments.ContainsKey(Constants.ArgumentNameConfigurationName) == true &&
-                Arguments[Constants.ArgumentNameConfigurationName].HasValue)
-            {
-                var configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
-
-                return configName;
-            }
-            else
-            {
-                return Constants.DefaultConfigurationName;
-            }
-        }
-
-
+        
         protected override void OnExecute()
         {
-            ValidateArguments();
+            ValidateConfiguration();
 
             //var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
             //var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
@@ -173,54 +129,6 @@ namespace Benday.GitRepoSync.Api
                 }
             }
         }
-
-        protected string GetPath(string fromValue)
-        {
-            if (Path.IsPathFullyQualified(fromValue) == true)
-            {
-                return fromValue;
-            }
-            else
-            {
-                if (fromValue.StartsWith("~") == true)
-                {
-                    fromValue = fromValue.Replace("~",
-                        Environment.GetEnvironmentVariable("HOME"));
-                }
-                else
-                {
-                    fromValue = Path.Combine(Environment.CurrentDirectory, fromValue);
-                }
-
-                var info = new FileInfo(fromValue);
-                
-                return info.FullName;
-            }
-        }
-
-        protected void ValidateArguments()
-        {
-            var configFilename = GetPath(Arguments.GetStringValue(Constants.ArgumentNameConfigFile));
-            var codeFolderPath = GetPath(Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath));
-
-            if (Directory.Exists(codeFolderPath) == false)
-            {
-                // var message = $"Code folder directory does not exist - {codeFolderPath}";
-
-                WriteLine($"Code folder directory does not exist - {codeFolderPath}. Creating...");
-                // Console.Error.WriteLine(message);
-
-                // throw new DirectoryNotFoundException(message);
-                Directory.CreateDirectory(codeFolderPath);
-            }
-
-            if (File.Exists(configFilename) == false)
-            {
-                var message = $"Config file does not exist - {configFilename}";
-
-                throw new KnownException(message);
-            }
-        }        
 
         private void UpdateRepo(bool isQuickSyncMode,
             RepositoryInfo repo, string codeFolderPath,

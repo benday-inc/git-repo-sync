@@ -7,6 +7,8 @@ namespace Benday.GitRepoSync.Api
         public const string CommandArgumentNameExportCloneGitRepos = "export";
         public const string CommandArgumentNameExportReposAsConfigFile = "exportconfig";
         public const string CommandArgumentNameUpdateAllRepos = "update";
+        public const string CommandArgumentNameListRepos = "listrepos";
+        public const string CommandArgumentNameListCategories = "listcategories";
 
         public const string ConfigFileName = "gitreposync-config.json";
         public const string DefaultConfigurationName = "(default)";
@@ -22,6 +24,7 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameCodeFolderPath = "codefolderpath";
         public const string ArgumentNameQuickSync = "quicksync";
         public const string ArgumentNameCategory = "category";
+        public const string ArgumentNameFilter = "filter";
         public const string CodeDirVariable = "%%CodeDir%%";
         public const string ArgumentNameParallel = "parallel";
         public const string ArgumentNameToFileName = "filename";
