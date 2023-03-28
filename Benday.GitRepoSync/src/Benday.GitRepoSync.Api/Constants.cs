@@ -11,6 +11,7 @@ namespace Benday.GitRepoSync.Api
         public const string CommandArgumentNameUpdateAllRepos = "update";
         public const string CommandArgumentNameListRepos = "listrepos";
         public const string CommandArgumentNameAddRepo = "addrepo";
+        public const string CommandArgumentNameRemoveRepo = "removerepo";
         public const string CommandArgumentNameGetRepoInfo = "info";
         public const string CommandArgumentNameListCategories = "listcategories";
 
