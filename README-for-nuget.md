@@ -1,15 +1,14 @@
 # gitreposync
 Do you have a gigantic sprawling mess of git repositories that you care about? 
 Do you need to manage that sprawl on multiple machines? Need to set up your 
-list of repos on new machine? 
-This utility helps you 
-to manage that mess. 
+list of repos on a new machine? 
+
+This utility helps you to manage that mess. 
 
 ### Key features:
-- Quickly sync all your git repos or just a subset of your repos with a single command. The tool decides whether to do a 
-'git clone' or a 'git pull'
+- Quickly sync all your git repos or just a subset of your repos with a single command. The tool decides whether to do a 'git clone' or a 'git pull'
 - Use a config file to define all the git repos you care about
-- Take your existing mess of git repos and script all into a config file
+- Take your existing mess of git repos and script it all into a config file
 - Define categories of git repos in the config file
 - Mark git repos as a 'quick sync' repository
 - Quickly sync all your 'quick sync' repos
@@ -40,9 +39,9 @@ Configurations are named and you can have as many as you'd like.
 
 ### Suggestion: Put your repo config file into a cloud storage provider
 I think you're going to want to use your repo config file (aka. your list of repositories) across multiple machines.
-My suggestion is that you create that file in a directory that's sync to a cloud storage provider like OneDrive or Dropbox.
+My suggestion is that you create that file in a directory that's synced to a cloud storage provider like OneDrive or Dropbox.
 
-### Why does the tool ask you for a source code diretory?
+### Why does the tool ask you for a source code directory?
 This tool is meant to be usable across OS platforms. The directory path where you store your source code is
 going to be completely different if you're working on Windows, Mac, or Linux -- but the list of git repositories that you 
 care about is probably the same.  
@@ -50,12 +49,11 @@ care about is probably the same.
 My guess is that you'll put your config file into a cloud storage provider like OneDrive or Dropbox.
 
 When you add a git repository to the configuration, the source code directory value for that repo gets replaced with a 
-variable ('%%CODE_DIR%%'). When you do a `gitreposync update`, the local version of the code directory automatically
-set into that code dir variable so that you can share a repo config file across multiple machines and operating systems 
+variable ('%%CODE_DIR%%'). When you do a `gitreposync update`, the local version of the code directory is automatically set into that code dir variable so that you can share a repo config file across multiple machines and operating systems 
 without having to change your config file.
 
 ### Set a Default Configuration
-There's one default configuration named `(default)`. If you only work with one Azure DevOps instance, then all you'll need to do is to is run `gitreposync addconfig /codedir:c:\code /filename:c:\onedrive\gitreposync\gitreposync.csv` and that will set your default configuration. 
+There's one default configuration named `(default)`. If you only work with one Azure DevOps instance, then all you'll need to do is to run `gitreposync addconfig /codedir:c:\code /filename:c:\onedrive\gitreposync\gitreposync.csv` and that will set your default configuration. 
 
 ### Additional Named Configurations
 If you want to add additional named configurations, you'll run `gitreposync addconfig /config:{name} ...`. 
@@ -66,7 +64,7 @@ Once you've set a default configuration, you can run any gitreposync command wit
 If you want to run a command against an Azure DevOps instance that is NOT your default, you'll need to supply the `/config:{name}`.
 
 ### Managing Configurations
-To add new configuration or modify an existing configuration, use the `gitreposync addconfig` command. You can list your configurations using the `gitreposync listconfig` command. To delete a configuration, use the `gitreposync removeconfig` command.
+To add new configurations or modify an existing configuration, use the `gitreposync addconfig` command. You can list your configurations using the `gitreposync listconfig` command. To delete a configuration, use the `gitreposync removeconfig` command.
 
 ## Getting Started: Scripting Your Current Git Repository Tree
 
@@ -91,7 +89,7 @@ will look at all the child directories under your current directory and export t
 format. The CSV data is printed to the console -- it does NOT actually update your repo config file.  Put another way, you'll
 need to manually copy the CSV data into your repo config file.  
 
-To open your repo config file run `gitreposync openconfig`. That command probably opens the repo config file in text editor but you might find that it's helpful to open that config file in Excel.  
+To open your repo config file run `gitreposync openconfig`. That command probably opens the repo config file in a text editor but you might find that it's helpful to open that config file in Excel.  
 
 ## Getting Started: Sync All Your Git Repositories
 
@@ -109,7 +107,7 @@ You can also organize your repositories by category. You can set the category fo
 
 To update just your quick sync repositories, run `gitreposync update /category:{category-name}`
 
-FYI, the category filter matches by the exact category name not the partial category name.
+FYI, the category filter matches by the exact category name, not the partial category name.
 
 ### Filter
 Sometimes you want to update repositories by name. To do this, you can specify a filter.
