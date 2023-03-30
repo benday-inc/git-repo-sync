@@ -45,6 +45,11 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         var runMultithreaded = Arguments.HasValue(Constants.ArgumentNameParallel);
         var codeFolderPath = GetCodeDir();
 
+        WriteLine($"Configuration name: {GetConfigurationName()}");
+        WriteLine($"Configuration file: {GetConfigFilename()}");
+        WriteLine($"Code directory    : {codeFolderPath}");
+        WriteLine("");
+
         var repos = GetMatchingRepositories();
 
         int totalCount = repos.Count;
@@ -79,7 +84,7 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
         var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
 
-        var repoFolder = Path.Combine(parentFolder, repo.RepositoryName);
+        var repoFolder = Path.Combine(parentFolder, GetGitRepoName(repo.GitUrl));
 
         if (Directory.Exists(repoFolder) == true)
         {
