@@ -53,7 +53,7 @@ variable ('%%CODE_DIR%%'). When you do a `gitreposync update`, the local version
 without having to change your config file.
 
 ### Set a Default Configuration
-There's one default configuration named `(default)`. If you only work with one Azure DevOps instance, then all you'll need to do is to run `gitreposync addconfig /codedir:c:\code /filename:c:\onedrive\gitreposync\gitreposync.csv` and that will set your default configuration. 
+There's one default configuration named `(default)`. If you only care about one list of git repositories, then all you'll need to do is to run `gitreposync addconfig /codedir:c:\code /filename:c:\onedrive\gitreposync\gitreposync.csv` and that will set your default configuration. Done.
 
 ### Additional Named Configurations
 If you want to add additional named configurations, you'll run `gitreposync addconfig /config:{name} ...`. 
@@ -61,7 +61,7 @@ If you want to add additional named configurations, you'll run `gitreposync addc
 ### Running Commands
 Once you've set a default configuration, you can run any gitreposync command without having to specify any additional URL or PAT info.  
 
-If you want to run a command against an Azure DevOps instance that is NOT your default, you'll need to supply the `/config:{name}`.
+If you want to run a command against a different list of git repo configs that is NOT your default, you'll need to supply the `/config:{name}`.
 
 ### Managing Configurations
 To add new configurations or modify an existing configuration, use the `gitreposync addconfig` command. You can list your configurations using the `gitreposync listconfig` command. To delete a configuration, use the `gitreposync removeconfig` command.
@@ -122,5 +122,3 @@ Yes, you can combine these filters and options.
 Feeling impatient?  Don't care that the messages displayed in the tool might be kind of a mess?  Try running `gitreposync update /parallel` 
 to run the update command in multi-threaded mode.  I guarantee that the displayed messages will be a complete mess...but since it runs 
 using multiple cores/processors, it'll probably run a bit faster.  
-
-
