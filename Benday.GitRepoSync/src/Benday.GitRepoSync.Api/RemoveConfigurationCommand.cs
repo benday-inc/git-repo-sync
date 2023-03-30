@@ -3,7 +3,7 @@
 namespace Benday.GitRepoSync.Api;
 
 [Command(Name = Constants.CommandArgumentNameRemoveConfig,
-        Description = "Remove an Azure DevOps configuration. For example, which server or account plus auth information.",
+        Description = "Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
         IsAsync = false)]
 public class RemoveConfigurationCommand : SynchronousCommand
 {

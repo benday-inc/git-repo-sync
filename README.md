@@ -125,19 +125,19 @@ using multiple cores/processors, it'll probably run a bit faster.
 ## Commands
 | Command Name | Description |
 | --- | --- |
-| [addconfig](#addconfig) | Add or update an Azure DevOps configuration. For example, which server or account plus auth information. |
+| [addconfig](#addconfig) | Add or update a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory. |
 | [addrepo](#addrepo) | Add or update a repo to the list of configured repositories. NOTE: Repository URL is the unique identifier |
 | [exportconfig](#exportconfig) | Reads existing Git repositories and outputs configuration information to config file. |
 | [info](#info) | Gets the configuration info for the current repo |
-| [listconfig](#listconfig) | List an Azure DevOps configuration. For example, which server or account plus auth information. |
+| [listconfig](#listconfig) | List a your git repo sync configurations. A git repo sync configuration is the list of repositories you care about plus your local code directory. |
 | [listcategories](#listcategories) | Lists the repository categories in the config file. |
 | [listrepos](#listrepos) | Reads config file and lists the configured repositories. |
 | [openconfig](#openconfig) | Open the repo configuration file in the default text editor |
-| [removeconfig](#removeconfig) | Remove an Azure DevOps configuration. For example, which server or account plus auth information. |
+| [removeconfig](#removeconfig) | Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory. |
 | [removerepo](#removerepo) | Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier |
 | [update](#update) | Performs a 'git clone' or 'git pull' for each configured git repository. |
 ## <a name="addconfig"></a> addconfig
-**Add or update an Azure DevOps configuration. For example, which server or account plus auth information.**
+**Add or update a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
@@ -172,7 +172,7 @@ using multiple cores/processors, it'll probably run a bit faster.
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
 ## <a name="listconfig"></a> listconfig
-**List an Azure DevOps configuration. For example, which server or account plus auth information.**
+**List a your git repo sync configurations. A git repo sync configuration is the list of repositories you care about plus your local code directory.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
@@ -199,7 +199,7 @@ using multiple cores/processors, it'll probably run a bit faster.
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
 ## <a name="removeconfig"></a> removeconfig
-**Remove an Azure DevOps configuration. For example, which server or account plus auth information.**
+**Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.**
 ### Arguments
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |

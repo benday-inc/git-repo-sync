@@ -3,7 +3,7 @@
 namespace Benday.GitRepoSync.Api;
 
 [Command(Name = Constants.CommandArgumentNameAddUpdateConfig,
-        Description = "Add or update an Azure DevOps configuration. For example, which server or account plus auth information.",
+        Description = "Add or update a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
         IsAsync = false)]
 public class AddUpdateConfigurationCommand : GitRepoConfigurationCommandBase
 {
