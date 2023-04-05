@@ -22,6 +22,14 @@ namespace Benday.GitRepoSync.ConsoleUi
             {
                 try
                 {
+                    var names = util.GetAvailableCommandNames(typeof(Constants).Assembly);
+
+                    if (names.Contains(args[0]) == false)
+                    {
+                        throw new KnownException(
+                                $"Invalid command name '{args[0]}'.");
+                    }
+
                     var command = util.GetCommand(args, typeof(Constants).Assembly);
 
                     if (command == null)
