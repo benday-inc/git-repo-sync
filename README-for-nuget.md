@@ -133,6 +133,7 @@ using multiple cores/processors, it'll probably run a bit faster.
 | listcategories | Lists the repository categories in the config file. |
 | listrepos | Reads config file and lists the configured repositories. |
 | openconfig | Open the repo configuration file in the default text editor |
+| quicksync | Performs a update on all quick sync repos. EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess. |
 | removeconfig | Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory. |
 | removerepo | Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier |
 | update | Performs a 'git clone' or 'git pull' for each configured git repository. |
@@ -198,6 +199,13 @@ using multiple cores/processors, it'll probably run a bit faster.
 | Argument | Is Optional | Data Type | Description |
 | --- | --- | --- | --- |
 | config | Optional | String | Configuration name to use |
+## quicksync
+**Performs a update on all quick sync repos. EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess.**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| config | Optional | String | Configuration name to use |
+| singlethread | Optional | Boolean | Runs the repo update operations single threaded. This turns off the experimental feature of running multithreaded. Running single threaded will fix the messed up message display. |
 ## removeconfig
 **Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.**
 ### Arguments
