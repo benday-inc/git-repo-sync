@@ -1,4 +1,5 @@
 using Benday.CommandsFramework;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -58,6 +59,8 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
         if (runMultithreaded == true)
         {
+            WriteLine("*** EXPERIMENTAL: RUNNING MULTITHREADED...MESSAGES ARE GOING TO BE WEIRD. ***");
+
             Parallel.ForEach(repos, repo =>
             {
                 UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
