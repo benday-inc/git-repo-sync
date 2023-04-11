@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Benday.GitRepoSync.ConsoleUi
 {
@@ -103,10 +104,76 @@ namespace Benday.GitRepoSync.ConsoleUi
 
             var longestName = commands.Max(x => x.Name.Length);
 
+            var consoleWidth = Console.WindowWidth;
+            var separator = " - ";
+            int commandNameColumnWidth = (longestName + separator.Length);
+            int descriptionColumnWidth = consoleWidth - commandNameColumnWidth;
+
             foreach (var command in commands.OrderBy(x => x.Name))
             {
                 Console.Write(GetNameWithPadding(command.Name, longestName));
-                Console.WriteLine($" - {command.Description}");
+                Console.Write(separator);
+    
+                var remainingCharCount =
+                    command.Description.Length -
+                    commandNameColumnWidth;
+
+                if (remainingCharCount <= descriptionColumnWidth)
+                {
+                    Console.WriteLine($"{command.Description}");
+                }
+                else
+                {
+                    WriteWrappedValue(command.Description,
+                        descriptionColumnWidth, commandNameColumnWidth);
+                }
+            }
+        }
+
+        private static void WriteWrappedValue(string valueToWrap,
+            int wrappedValueMaxLength, int commandNameColumnWidth)
+        {
+            var firstLine = valueToWrap.Substring(0, wrappedValueMaxLength);
+
+            var firstLineLastIndexOfSpace = firstLine.LastIndexOf(' ');
+
+            string secondLine = string.Empty;
+            string thirdLine = string.Empty;
+
+            if (firstLineLastIndexOfSpace == -1)
+            {
+                // not sure how to handle a value with no spaces...
+                // ...give up and write the unwrapped value
+                Console.WriteLine(valueToWrap);
+            }
+            else
+            {
+                firstLine = valueToWrap.Substring(0, firstLineLastIndexOfSpace);
+                secondLine = valueToWrap[firstLineLastIndexOfSpace..];
+
+                if (secondLine.Length > wrappedValueMaxLength)
+                {
+                    var secondLineLastIndexOfSpace = secondLine.LastIndexOf(' ');
+
+                    thirdLine = secondLine[secondLineLastIndexOfSpace..];
+
+                    secondLine = secondLine.Substring(0,
+                        secondLineLastIndexOfSpace);
+                }
+
+                var builder = new StringBuilder();
+                builder.Append(' ', commandNameColumnWidth);
+                builder.Append(secondLine.Trim());
+
+                if (string.IsNullOrWhiteSpace(thirdLine) == false)
+                {
+                    builder.AppendLine();
+                    builder.Append(' ', commandNameColumnWidth);
+                    builder.Append(thirdLine.Trim());
+                }
+
+                Console.WriteLine(firstLine.Trim());
+                Console.WriteLine(builder.ToString());
             }
         }
 
