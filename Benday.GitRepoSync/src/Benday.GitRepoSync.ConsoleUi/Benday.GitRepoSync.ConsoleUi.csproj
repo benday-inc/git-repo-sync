@@ -35,9 +35,9 @@
 		<RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-		<AssemblyVersion>2.3.0.0</AssemblyVersion>
+		<AssemblyVersion>2.4.0.0</AssemblyVersion>
         <AssemblyName>gitreposync</AssemblyName>
-		<Version>$(VersionPrefix)2.3.0</Version>
+		<Version>$(VersionPrefix)2.4.0</Version>
 		<Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
 
 	</PropertyGroup>
