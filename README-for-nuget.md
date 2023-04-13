@@ -100,7 +100,7 @@ That command will perform either a git clone or a git pull to make sure that you
 There are probably some repositories that you work with all the time and that have frequent changes. 
 You can mark a configured git repository as a 'quick sync' repository using `gitreposync addrepo /quicksync`. 
 
-To update just your quick sync repositories, run `gitreposync update /quicksync`
+To update just your quick sync repositories, run `gitreposync quicksync`
 
 ### Category
 You can also organize your repositories by category. You can set the category for a repository using `gitreposync addrepo /category:{category-name}`. 
