@@ -1,30 +1,29 @@
+using Benday.CommandsFramework;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-
-using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
-[Command(Name = Constants.CommandArgumentNameUpdateAllRepos,
+[Command(
+    Name = Constants.CommandArgumentNameUpdateAllRepos,
     IsAsync = false,
     Description = "Performs a 'git clone' or 'git pull' for each configured git repository.")]
 public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 {
-    public UpdateAllReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-           base(info, outputProvider)
+    public UpdateAllReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
-
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var args = new ArgumentCollection();
+        ArgumentCollection args = new ArgumentCollection();
 
         AddCommonArguments(args);
 
@@ -33,7 +32,8 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         args.AddBoolean(Constants.ArgumentNameParallel)
             .AsNotRequired()
             .AllowEmptyValue()
-            .WithDescription("EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess.");
+            .WithDescription(
+                "EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess.");
 
         return args;
     }
@@ -43,15 +43,15 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
     {
         ValidateConfiguration();
 
-        var runMultithreaded = Arguments.HasValue(Constants.ArgumentNameParallel);
-        var codeFolderPath = GetCodeDir();
+        bool runMultithreaded = Arguments.HasValue(Constants.ArgumentNameParallel);
+        string codeFolderPath = GetCodeDir();
 
         WriteLine($"Configuration name: {GetConfigurationName()}");
         WriteLine($"Configuration file: {GetConfigFilename()}");
         WriteLine($"Code directory    : {codeFolderPath}");
-        WriteLine("");
+        WriteLine(string.Empty);
 
-        var repos = GetMatchingRepositories();
+        List<RepositoryInfo> repos = GetMatchingRepositories();
 
         int totalCount = repos.Count;
 
@@ -61,15 +61,17 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         {
             WriteLine("*** EXPERIMENTAL: RUNNING MULTITHREADED...MESSAGES ARE GOING TO BE WEIRD. ***");
 
-            Parallel.ForEach(repos, repo =>
-            {
-                UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
-                currentNumber++;
-            });
+            Parallel.ForEach(
+                repos,
+                repo =>
+                {
+                    UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
+                    currentNumber++;
+                });
         }
         else
         {
-            foreach (var repo in repos)
+            foreach (RepositoryInfo repo in repos)
             {
                 // DebugRepoInfo(codeFolderPath, repo);
 
@@ -79,15 +81,13 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         }
     }
 
-    private void UpdateRepo(
-        RepositoryInfo repo, string codeFolderPath,
-        int currentNumber, int totalCount)
+    private void UpdateRepo(RepositoryInfo repo, string codeFolderPath, int currentNumber, int totalCount)
     {
         WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.RepositoryName}...");
 
-        var parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
+        string parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
 
-        var repoFolder = Path.Combine(parentFolder, GetGitRepoName(repo.GitUrl));
+        string repoFolder = Path.Combine(parentFolder, GetGitRepoName(repo.GitUrl));
 
         if (Directory.Exists(repoFolder) == true)
         {
@@ -108,31 +108,28 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
             Directory.CreateDirectory(parentFolder);
         }
 
-        var cloneCommand = new ProcessStartInfo("git",
-            $"clone {repo.GitUrl}")
+        ProcessStartInfo cloneCommand = new ProcessStartInfo("git", $"clone {repo.GitUrl}")
         {
             WorkingDirectory = parentFolder
         };
 
-        Process.Start(cloneCommand).WaitForExit();
+        var process = Process.Start(cloneCommand) ?? throw new InvalidOperationException();
+
+        process.WaitForExit();
     }
 
     private void SyncRepo(RepositoryInfo repo, string repoFolder)
     {
         WriteLine($"Getting changes for {repo.RepositoryName}...");
 
-        var pullCommand = new ProcessStartInfo("git",
-            $"pull")
-        {
-            WorkingDirectory = repoFolder
-        };
+        ProcessStartInfo pullCommand = new ProcessStartInfo("git", $"pull") { WorkingDirectory = repoFolder };
 
-        Process.Start(pullCommand).WaitForExit(); ;
+        var process = Process.Start(pullCommand) ?? throw new InvalidOperationException();
+
+        process.WaitForExit();
     }
 
 
     private string ReplaceCodeVariable(string parentFolder, string codeFolderPath)
-    {
-        return parentFolder.Replace(Constants.CodeDirVariable, codeFolderPath);
-    }
+    { return parentFolder.Replace(Constants.CodeDirVariable, codeFolderPath); }
 }

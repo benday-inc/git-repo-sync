@@ -2,19 +2,21 @@
 
 namespace Benday.GitRepoSync.Api;
 
-[Command(Name = Constants.CommandArgumentNameRemoveConfig,
-        Description = "Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
-        IsAsync = false)]
+[Command(
+    Name = Constants.CommandArgumentNameRemoveConfig,
+    Description = "Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
+    IsAsync = false)]
 public class RemoveConfigurationCommand : SynchronousCommand
 {
-    public RemoveConfigurationCommand(
-        CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(info, outputProvider)
+    public RemoveConfigurationCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var arguments = new ArgumentCollection();
+        ArgumentCollection arguments = new ArgumentCollection();
 
         arguments.AddString(Constants.ArgumentNameConfigurationName)
             .WithDescription("Name of the configuration")
@@ -24,7 +26,5 @@ public class RemoveConfigurationCommand : SynchronousCommand
     }
 
     protected override void OnExecute()
-    {
-        GitRepoSyncConfigurationManager.Instance.Remove(Arguments[Constants.ArgumentNameConfigurationName].Value);
-    }
+    { GitRepoSyncConfigurationManager.Instance.Remove(Arguments[Constants.ArgumentNameConfigurationName].Value); }
 }

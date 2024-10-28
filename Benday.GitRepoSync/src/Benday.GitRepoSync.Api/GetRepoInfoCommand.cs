@@ -1,31 +1,27 @@
+using Benday.CommandsFramework;
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
 
-[Command(Name = Constants.CommandArgumentNameGetRepoInfo,
+[Command(
+    Name = Constants.CommandArgumentNameGetRepoInfo,
     IsAsync = false,
     Description = "Gets the configuration info for the current repo")]
 public class GetRepoInfoCommand : GitRepoConfigurationCommandBase
 {
-    public GetRepoInfoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-           base(info, outputProvider)
+    public GetRepoInfoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
-
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var args = new ArgumentCollection();
+        ArgumentCollection args = new ArgumentCollection();
 
         AddCommonArguments(args);
 
@@ -52,9 +48,9 @@ public class GetRepoInfoCommand : GitRepoConfigurationCommandBase
 
         List<RepositoryInfo> repos = GetRepositories();
 
-        var repo = repos.Where(r => string.Equals(
-            r.GitUrl, repositoryUrl,
-            StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+        RepositoryInfo? repo = repos.Where(
+            r => string.Equals(r.GitUrl, repositoryUrl, StringComparison.CurrentCultureIgnoreCase))
+            .FirstOrDefault();
 
         if (repo != null)
         {

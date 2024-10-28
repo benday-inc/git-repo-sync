@@ -1,29 +1,27 @@
+using Benday.CommandsFramework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-
-using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api
 {
-    [Command(Name = Constants.CommandArgumentNameExportReposAsConfigFile,
+    [Command(
+        Name = Constants.CommandArgumentNameExportReposAsConfigFile,
         IsAsync = false,
         Description = "Reads existing Git repositories and outputs configuration information to config file.")]
     public class ExportReposAsConfigFileCommand : GitRepoConfigurationCommandBase
     {
-        public ExportReposAsConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-               base(info, outputProvider)
+        public ExportReposAsConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+            info,
+            outputProvider)
         {
-
         }
 
         public override ArgumentCollection GetArguments()
         {
-            var args = new ArgumentCollection();
+            ArgumentCollection args = new ArgumentCollection();
 
             args.AddString(Constants.ArgumentNameFromPath)
                 .WithDescription("Starting path for search. NOTE: this only checks immediate child directories.");
@@ -43,9 +41,9 @@ namespace Benday.GitRepoSync.Api
 
         protected override void OnExecute()
         {
-            var baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
-            var codeDirArgValue = Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath);
-            var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
+            string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
+            string codeDirArgValue = Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath);
+            string category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
 
             if (Path.IsPathFullyQualified(baseDir) == false)
             {
@@ -74,7 +72,8 @@ namespace Benday.GitRepoSync.Api
 
                 codeDirArgValue = Path.GetFullPath(codeDirArgValue);
 
-                WriteLine($"INFO: Replacing code folder '{codeDirArgValue}' with variable '{Constants.CodeDirVariable}'.");
+                WriteLine(
+                    $"INFO: Replacing code folder '{codeDirArgValue}' with variable '{Constants.CodeDirVariable}'.");
 
                 if (Directory.Exists(codeDirArgValue) == false)
                 {
@@ -88,7 +87,7 @@ namespace Benday.GitRepoSync.Api
                 Console.WriteLine("INFO: Not replacing code folder with variable.");
             }
 
-            WriteLine("");
+            WriteLine(string.Empty);
 
             StringBuilder builder = new();
 
@@ -97,24 +96,21 @@ namespace Benday.GitRepoSync.Api
 
             if (Directory.Exists(baseDir) == true)
             {
-                var dirs = Directory.EnumerateDirectories(baseDir);
+                IEnumerable<string> dirs = Directory.EnumerateDirectories(baseDir);
 
-                var numberOfReposFound = 0;
+                int numberOfReposFound = 0;
 
-                foreach (var dir in dirs)
+                foreach (string dir in dirs)
                 {
-                    var remote = GetGitRepoRemote(dir).Trim();
+                    string remote = GetGitRepoRemote(dir).Trim();
 
-                    if (String.IsNullOrWhiteSpace(remote) == false)
+                    if (string.IsNullOrWhiteSpace(remote) == false)
                     {
                         numberOfReposFound++;
 
-                        var repoName = GetGitRepoName(remote)
-                            .Replace("-", " ")
-                            .Replace(",", " ");
+                        string repoName = GetGitRepoName(remote).Replace("-", " ").Replace(",", " ");
 
-                        builder.AppendLine(
-                            $"{false},{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
+                        builder.AppendLine($"{false},{category},{repoName},{baseDirFormattedForConfigFile},{remote}");
                     }
                 }
 
@@ -122,15 +118,16 @@ namespace Benday.GitRepoSync.Api
 
                 if (numberOfReposFound == 0)
                 {
-                    WriteLine("");
-                    WriteLine($"** Didn't find any git repos in '{baseDir}'. " +
-                        $"Did you remember that this tool doesn't recurse directories? " +
-                        "It only looks at immediate " +
-                        "children of this directory.");
+                    WriteLine(string.Empty);
+                    WriteLine(
+                        $"** Didn't find any git repos in '{baseDir}'. " +
+                            $"Did you remember that this tool doesn't recurse directories? " +
+                            "It only looks at immediate " +
+                            "children of this directory.");
                 }
                 else
                 {
-                    var script = builder.ToString();
+                    string script = builder.ToString();
 
                     if (Arguments.HasValue(Constants.ArgumentNameToFileName) == false)
                     {
@@ -139,7 +136,7 @@ namespace Benday.GitRepoSync.Api
                     }
                     else
                     {
-                        var toFileName = Arguments.GetStringValue(Constants.ArgumentNameToFileName);
+                        string toFileName = Arguments.GetStringValue(Constants.ArgumentNameToFileName);
 
                         if (Path.IsPathFullyQualified(toFileName) == false)
                         {
@@ -148,7 +145,7 @@ namespace Benday.GitRepoSync.Api
 
                         toFileName = Path.GetFullPath(toFileName);
 
-                        var directory = new DirectoryInfo(Path.GetDirectoryName(toFileName)!);
+                        DirectoryInfo directory = new DirectoryInfo(Path.GetDirectoryName(toFileName)!);
 
                         if (directory.Exists == false)
                         {

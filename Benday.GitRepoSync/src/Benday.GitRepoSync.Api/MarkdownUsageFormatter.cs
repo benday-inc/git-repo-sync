@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Benday.CommandsFramework;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using System.Text;
+
 namespace Benday.GitRepoSync.Api;
+
 public class MarkdownUsageFormatter
 {
     public string Format(List<CommandInfo> usages, bool skipCommandAnchors)
     {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
         AppendCommandList(usages, builder, skipCommandAnchors);
 
-        foreach (var usage in usages)
+        foreach (CommandInfo usage in usages)
         {
             AppendUsage(builder, usage, skipCommandAnchors);
         }
@@ -30,7 +32,7 @@ public class MarkdownUsageFormatter
         builder.AppendLine("| Command Name | Description |");
         builder.AppendLine("| --- | --- |");
 
-        foreach (var usage in usages)
+        foreach (CommandInfo usage in usages)
         {
             if (skipCommandAnchors)
             {
@@ -61,7 +63,7 @@ public class MarkdownUsageFormatter
         builder.AppendLine("| Argument | Is Optional | Data Type | Description |");
         builder.AppendLine("| --- | --- | --- | --- |");
 
-        foreach (var arg in usage.Arguments)
+        foreach (IArgument arg in usage.Arguments)
         {
             builder.Append("| ");
             builder.Append(arg.Name);

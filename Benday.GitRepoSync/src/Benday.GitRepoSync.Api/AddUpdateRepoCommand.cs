@@ -1,32 +1,30 @@
+using Benday.CommandsFramework;
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
 
-[Command(Name = Constants.CommandArgumentNameAddRepo,
+[Command(
+    Name = Constants.CommandArgumentNameAddRepo,
     IsAsync = false,
     Description = "Add or update a repo to the list of configured repositories. " +
     "NOTE: Repository URL is the unique identifier")]
 public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
 {
-    public AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-           base(info, outputProvider)
+    public AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
-
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var args = new ArgumentCollection();
+        ArgumentCollection args = new ArgumentCollection();
 
         AddCommonArguments(args);
 
@@ -44,17 +42,16 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
             .WithDescription("Add repo to quick sync");
 
         args.AddBoolean(Constants.ArgumentNameOverwrite)
-           .AsNotRequired()
-           .AllowEmptyValue()
-           .WithDescription("Overwrites an existing repo config");
-
-        args.AddString(Constants.ArgumentNameCategory)
             .AsNotRequired()
-            .WithDescription("Category for the repository");
+            .AllowEmptyValue()
+            .WithDescription("Overwrites an existing repo config");
+
+        args.AddString(Constants.ArgumentNameCategory).AsNotRequired().WithDescription("Category for the repository");
 
         args.AddString(Constants.ArgumentNameRepoUrl)
             .AsNotRequired()
-            .WithDescription("Repository URL value. NOTE: If not supplied, the repo URL for the current directory is used");
+            .WithDescription(
+                "Repository URL value. NOTE: If not supplied, the repo URL for the current directory is used");
 
         return args;
     }
@@ -81,8 +78,9 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         {
             if (Arguments.HasValue(Constants.ArgumentNameParentDir) == false)
             {
-                throw new KnownException($"You must specify a value for /{Constants.ArgumentNameParentDir} " +
-                    $"when you use the /{Constants.ArgumentNameRepoUrl} argument.");
+                throw new KnownException(
+                    $"You must specify a value for /{Constants.ArgumentNameParentDir} " +
+                        $"when you use the /{Constants.ArgumentNameRepoUrl} argument.");
             }
             else
             {
@@ -103,19 +101,17 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
 
         List<RepositoryInfo> repos = GetRepositories();
 
-        var repo = repos.Where(r => string.Equals(
-            r.GitUrl, repositoryUrl,
-            StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+        RepositoryInfo? repo = repos.Where(
+            r => string.Equals(r.GitUrl, repositoryUrl, StringComparison.CurrentCultureIgnoreCase))
+            .FirstOrDefault();
 
-        if (repo != null &&
-            Arguments.GetBooleanValue(Constants.ArgumentNameOverwrite) == false)
+        if (repo != null && Arguments.GetBooleanValue(Constants.ArgumentNameOverwrite) == false)
         {
             WriteLine("*** REPOSITORY ALREADY CONFIGURED ***");
             WriteRepositoryInfo(repo);
             throw new KnownException($"Add the /{Constants.ArgumentNameOverwrite} argument to modify the configuration");
         }
-        else if (repo != null &&
-            Arguments.GetBooleanValue(Constants.ArgumentNameOverwrite) == true)
+        else if (repo != null && Arguments.GetBooleanValue(Constants.ArgumentNameOverwrite) == true)
         {
             // modify existing
 
@@ -140,9 +136,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         WriteToDisk(repos);
     }
 
-    private void PopulateNewRepositoryInfo(RepositoryInfo match,
-        string repositoryUrl,
-        string parentDirectory)
+    private void PopulateNewRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
@@ -171,21 +165,20 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
 
     private string EscapeParentDirectory(string parentDirectory)
     {
-        var dir = new DirectoryInfo(parentDirectory);
+        DirectoryInfo dir = new DirectoryInfo(parentDirectory);
 
-        var parentDir = dir.Parent.FullName;
-        var codeDir = GetCodeDir();
+        string parentDir = dir.Parent?.FullName ?? throw new InvalidOperationException();
+        string codeDir = GetCodeDir();
 
-        var parentDirNameEscaped = parentDir.Replace(codeDir,
+        string parentDirNameEscaped = parentDir.Replace(
+            codeDir,
             Constants.CodeDirVariable,
             StringComparison.CurrentCultureIgnoreCase);
 
         return parentDirNameEscaped;
     }
 
-    private void UpdateExistingRepositoryInfo(RepositoryInfo match,
-        string repositoryUrl,
-        string parentDirectory)
+    private void UpdateExistingRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
@@ -208,19 +201,15 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         match.ParentFolder = EscapeParentDirectory(parentDirectory);
     }
 
-    private void WriteToDisk(List<RepositoryInfo> repos)
-    {
-
-        WriteToDisk(repos, GetConfigFilename());
-    }
+    private void WriteToDisk(List<RepositoryInfo> repos) { WriteToDisk(repos, GetConfigFilename()); }
 
     private void WriteToDisk(List<RepositoryInfo> repos, string filename)
     {
         if (File.Exists(filename) == false)
         {
-            var info = new FileInfo(filename);
+            FileInfo info = new FileInfo(filename);
 
-            var dir = info.Directory;
+            var dir = info.Directory ?? throw new InvalidOperationException();
 
             if (dir.Exists == false)
             {
@@ -234,14 +223,14 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         builder.AppendLine("quicksync,category,description,parent folder,giturl");
 
 
-        foreach (var repo in repos)
+        foreach (RepositoryInfo repo in repos)
         {
             builder.AppendLine(
-            $"{repo.IsQuickSync}," +
-            $"{repo.Category.Replace(",", " ")}," +
-            $"{repo.RepositoryName.Replace(",", " ")}," +
-            $"{repo.ParentFolder.Replace('\\', '/')}," +
-            $"{repo.GitUrl}");
+                $"{repo.IsQuickSync}," +
+                    $"{repo.Category.Replace(",", " ")}," +
+                    $"{repo.RepositoryName.Replace(",", " ")}," +
+                    $"{repo.ParentFolder.Replace('\\', '/')}," +
+                    $"{repo.GitUrl}");
         }
 
         File.WriteAllText(filename, builder.ToString());

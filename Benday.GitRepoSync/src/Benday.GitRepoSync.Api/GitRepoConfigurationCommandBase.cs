@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
+﻿
 using Benday.CommandsFramework;
+
+using System.Collections.Generic;
+using System.Diagnostics;
+
+using System.IO;
 
 namespace Benday.GitRepoSync.Api
 {
     public abstract class GitRepoConfigurationCommandBase : SynchronousCommand
     {
-        public GitRepoConfigurationCommandBase(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-               base(info, outputProvider)
+        public GitRepoConfigurationCommandBase(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+            info,
+            outputProvider)
         {
-
         }
 
         protected void AddCommonArguments(ArgumentCollection args)
@@ -29,14 +31,15 @@ namespace Benday.GitRepoSync.Api
             {
                 if (_Configuration == null)
                 {
-                    var configName = GetConfigurationName();
+                    string configName = GetConfigurationName();
 
-                    var temp =
+                    GitRepoSyncConfiguration? temp =
                         GitRepoSyncConfigurationManager.Instance.Get(configName);
 
                     if (temp == null)
                     {
-                        throw new KnownException($"Could not find a configuration named '{configName}'. Add a configuration and try again.");
+                        throw new KnownException(
+                            $"Could not find a configuration named '{configName}'. Add a configuration and try again.");
                     }
 
                     _Configuration = temp;
@@ -45,7 +48,7 @@ namespace Benday.GitRepoSync.Api
                 return _Configuration;
             }
 
-            set => _Configuration = value;
+            set { _Configuration = value; }
         }
 
         protected string GetConfigurationName()
@@ -53,7 +56,7 @@ namespace Benday.GitRepoSync.Api
             if (Arguments.ContainsKey(Constants.ArgumentNameConfigurationName) == true &&
                 Arguments[Constants.ArgumentNameConfigurationName].HasValue)
             {
-                var configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
+                string configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
 
                 return configName;
             }
@@ -73,15 +76,14 @@ namespace Benday.GitRepoSync.Api
             {
                 if (fromValue.StartsWith("~") == true)
                 {
-                    fromValue = fromValue.Replace("~",
-                        Environment.GetEnvironmentVariable("HOME"));
+                    fromValue = fromValue.Replace("~", Environment.GetEnvironmentVariable("HOME"));
                 }
                 else
                 {
                     fromValue = Path.Combine(Environment.CurrentDirectory, fromValue);
                 }
 
-                var info = new FileInfo(fromValue);
+                FileInfo info = new FileInfo(fromValue);
 
                 return info.FullName;
             }
@@ -89,8 +91,8 @@ namespace Benday.GitRepoSync.Api
 
         protected void ValidateConfiguration()
         {
-            var configFilename = GetConfigFilename();
-            var codeFolderPath = GetPath(Configuration.CodeDirectoryValue);
+            string configFilename = GetConfigFilename();
+            string codeFolderPath = GetPath(Configuration.CodeDirectoryValue);
 
             if (Directory.Exists(codeFolderPath) == false)
             {
@@ -105,34 +107,37 @@ namespace Benday.GitRepoSync.Api
 
             if (File.Exists(configFilename) == false)
             {
-                var message = $"Config file does not exist - {configFilename}";
+                string message = $"Config file does not exist - {configFilename}";
 
                 throw new KnownException(message);
             }
         }
 
-        protected string GetConfigFilename()
-        {
-            return GetPath(Configuration.ConfigurationFilePath);
-        }
+        protected string GetConfigFilename() { return GetPath(Configuration.ConfigurationFilePath); }
 
         protected string GetCodeDir()
         {
-            var temp = GetPath(Configuration.CodeDirectoryValue);
+            string temp = GetPath(Configuration.CodeDirectoryValue);
 
-            if (Directory.Exists(temp) == false) { return temp; }
-            else { return new DirectoryInfo(temp).FullName; }
+            if (Directory.Exists(temp) == false)
+            {
+                return temp;
+            }
+            else
+            {
+                return new DirectoryInfo(temp).FullName;
+            }
         }
 
         protected List<RepositoryInfo> GetRepositories()
         {
-            var lines = File.ReadAllLines(GetConfigFilename());
+            string[] lines = File.ReadAllLines(GetConfigFilename());
 
-            var returnValues = new List<RepositoryInfo>();
+            List<RepositoryInfo> returnValues = new List<RepositoryInfo>();
 
             bool isFirstLine = true;
 
-            foreach (var line in lines)
+            foreach (string line in lines)
             {
                 if (isFirstLine == true)
                 {
@@ -140,7 +145,7 @@ namespace Benday.GitRepoSync.Api
                     continue;
                 }
 
-                var repo = GetRepository(line);
+                RepositoryInfo repo = GetRepository(line);
 
                 if (repo != null)
                 {
@@ -152,26 +157,25 @@ namespace Benday.GitRepoSync.Api
         }
 
         /// <summary>
-        /// Gets a list of repositories from the config file optionally 
-        /// filtered by command line filter options.
+        /// Gets a list of repositories from the config file optionally  filtered by command line filter options.
         /// /filter:string, /quicksync, and/or /category:string
         /// </summary>
         /// <returns></returns>
         protected List<RepositoryInfo> GetMatchingRepositories()
         {
-            var filterMode = Arguments.HasValue(Constants.ArgumentNameFilter);
-            var filter = Arguments.GetStringValue(Constants.ArgumentNameFilter);
-            var categoryFilterMode = Arguments.HasValue(Constants.ArgumentNameCategory);
-            var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
+            bool filterMode = Arguments.HasValue(Constants.ArgumentNameFilter);
+            string filter = Arguments.GetStringValue(Constants.ArgumentNameFilter);
+            bool categoryFilterMode = Arguments.HasValue(Constants.ArgumentNameCategory);
+            string category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
 
             bool isQuickSyncMode = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
 
-            var repos = GetRepositories();
+            List<RepositoryInfo> repos = GetRepositories();
 
             if (categoryFilterMode == true)
             {
-                repos = repos.Where(r => string.Equals(r.Category, category,
-                    StringComparison.CurrentCultureIgnoreCase)).ToList();
+                repos = repos.Where(r => string.Equals(r.Category, category, StringComparison.CurrentCultureIgnoreCase))
+                    .ToList();
             }
 
             if (filterMode == true)
@@ -189,11 +193,11 @@ namespace Benday.GitRepoSync.Api
 
         private RepositoryInfo GetRepository(string line)
         {
-            var tokens = line.Split(',');
+            string[] tokens = line.Split(',');
 
             if (tokens.Length != 5)
             {
-                var message = $"Invalid line.  Not enough tokens.";
+                string message = $"Invalid line.  Not enough tokens.";
                 Console.Error.WriteLine(message);
                 Console.Error.WriteLine(line);
 
@@ -201,7 +205,7 @@ namespace Benday.GitRepoSync.Api
             }
             else
             {
-                var temp = new RepositoryInfo
+                RepositoryInfo temp = new RepositoryInfo
                 {
                     IsQuickSync = ToBoolean(tokens[0]),
                     Category = tokens[1],
@@ -216,7 +220,7 @@ namespace Benday.GitRepoSync.Api
 
         protected bool ToBoolean(string fromValue, bool defaultValue = false)
         {
-            if (bool.TryParse(fromValue, out var result) == true)
+            if (bool.TryParse(fromValue, out bool result) == true)
             {
                 return result;
             }
@@ -228,17 +232,17 @@ namespace Benday.GitRepoSync.Api
 
         protected string GetGitRepoName(string gitRepoUrl)
         {
-            var repoUri = new Uri(gitRepoUrl);
+            Uri repoUri = new Uri(gitRepoUrl);
 
-            var lastToken = repoUri.Segments.Last();
+            string lastToken = repoUri.Segments.Last();
 
-            if (String.IsNullOrWhiteSpace(lastToken) == true)
+            if (string.IsNullOrWhiteSpace(lastToken) == true)
             {
-                return String.Empty;
+                return string.Empty;
             }
             else if (lastToken.EndsWith(".git") == true)
             {
-                return lastToken.Replace(".git", String.Empty);
+                return lastToken.Replace(".git", string.Empty);
             }
             else
             {
@@ -249,8 +253,8 @@ namespace Benday.GitRepoSync.Api
         public static void AddRepoFilters(ArgumentCollection args)
         {
             args.AddString(Constants.ArgumentNameFilter)
-                        .AsNotRequired()
-                        .WithDescription("Filter repos by partial string value");
+                .AsNotRequired()
+                .WithDescription("Filter repos by partial string value");
 
             args.AddString(Constants.ArgumentNameCategory)
                 .AsNotRequired()
@@ -264,7 +268,7 @@ namespace Benday.GitRepoSync.Api
 
         protected string GetGitRepoRemote(string dir)
         {
-            var temp = new ProcessStartInfo
+            ProcessStartInfo temp = new ProcessStartInfo
             {
                 WorkingDirectory = dir,
 
@@ -277,19 +281,19 @@ namespace Benday.GitRepoSync.Api
                 RedirectStandardOutput = true
             };
 
-            var process = Process.Start(temp);
+            var process = Process.Start(temp) ?? throw new InvalidOperationException();
 
             process.WaitForExit();
 
-            var output = process.StandardOutput.ReadLine();
+            string? output = process.StandardOutput.ReadLine();
 
             if (output != null)
             {
-                output = output.Replace("origin	", String.Empty).Replace(" (fetch)", String.Empty);
+                output = output.Replace("origin	", string.Empty).Replace(" (fetch)", string.Empty);
 
                 if (output.Contains('\t') == true)
                 {
-                    var tokens = output.Split('\t');
+                    string[] tokens = output.Split('\t');
 
                     output = tokens.Last();
                 }
@@ -304,7 +308,7 @@ namespace Benday.GitRepoSync.Api
 
         protected string GetGitRepoRootDirectory(string dir)
         {
-            var temp = new ProcessStartInfo
+            ProcessStartInfo temp = new ProcessStartInfo
             {
                 WorkingDirectory = dir,
 
@@ -318,14 +322,13 @@ namespace Benday.GitRepoSync.Api
                 RedirectStandardOutput = true
             };
 
-            var process = Process.Start(temp);
+            var process = Process.Start(temp) ?? throw new InvalidOperationException();
 
             process.WaitForExit();
 
-            var output = process.StandardOutput.ReadLine();
+            string? output = process.StandardOutput.ReadLine();
 
-            if (output == null ||
-                output.Contains("not a git repository") == true)
+            if (output == null || output.Contains("not a git repository") == true)
             {
                 throw new KnownException($"Directory '{dir}' is not a git repository");
             }

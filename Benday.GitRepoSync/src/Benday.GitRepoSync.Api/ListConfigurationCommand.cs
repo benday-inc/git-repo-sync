@@ -2,19 +2,21 @@
 
 namespace Benday.GitRepoSync.Api;
 
-[Command(Name = Constants.CommandArgumentNameListConfig,
-        Description = "List a your git repo sync configurations. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
-        IsAsync = false)]
+[Command(
+    Name = Constants.CommandArgumentNameListConfig,
+    Description = "List a your git repo sync configurations. A git repo sync configuration is the list of repositories you care about plus your local code directory.",
+    IsAsync = false)]
 public class ListConfigurationCommand : SynchronousCommand
 {
-    public ListConfigurationCommand(
-        CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(info, outputProvider)
+    public ListConfigurationCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var arguments = new ArgumentCollection();
+        ArgumentCollection arguments = new ArgumentCollection();
 
         arguments.AddString(Constants.ArgumentNameConfigurationName)
             .WithDescription("Name of the configuration")
@@ -27,15 +29,15 @@ public class ListConfigurationCommand : SynchronousCommand
     {
         if (Arguments[Constants.ArgumentNameConfigurationName].HasValue)
         {
-            var configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
+            string configName = Arguments[Constants.ArgumentNameConfigurationName].Value;
 
-            var config = GitRepoSyncConfigurationManager.Instance.Get(configName);
+            GitRepoSyncConfiguration? config = GitRepoSyncConfigurationManager.Instance.Get(configName);
 
             Print(config, configName);
         }
         else
         {
-            var configs = GitRepoSyncConfigurationManager.Instance.GetAll();
+            GitRepoSyncConfiguration[] configs = GitRepoSyncConfigurationManager.Instance.GetAll();
 
             Print(configs);
         }
@@ -49,7 +51,7 @@ public class ListConfigurationCommand : SynchronousCommand
         }
         else
         {
-            foreach (var config in configs)
+            foreach (GitRepoSyncConfiguration config in configs)
             {
                 Print(config, config.Name);
             }

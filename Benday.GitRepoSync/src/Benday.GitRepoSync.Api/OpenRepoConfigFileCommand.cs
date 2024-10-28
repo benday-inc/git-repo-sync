@@ -1,31 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
 using Benday.CommandsFramework;
+
+using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Benday.GitRepoSync.Api;
 
 
-[Command(Name = Constants.CommandArgumentNameOpenRepoConfigFile,
+[Command(
+    Name = Constants.CommandArgumentNameOpenRepoConfigFile,
     IsAsync = false,
     Description = "Open the repo configuration file in the default text editor")]
 public class OpenRepoConfigFileCommand : GitRepoConfigurationCommandBase
 {
-    public OpenRepoConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-           base(info, outputProvider)
+    public OpenRepoConfigFileCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+        info,
+        outputProvider)
     {
-
     }
 
     public override ArgumentCollection GetArguments()
     {
-        var args = new ArgumentCollection();
+        ArgumentCollection args = new ArgumentCollection();
 
         AddCommonArguments(args);
 
@@ -36,7 +32,7 @@ public class OpenRepoConfigFileCommand : GitRepoConfigurationCommandBase
     {
         ValidateConfiguration();
 
-        var configFile = GetConfigFilename();
+        string configFile = GetConfigFilename();
 
         WriteLine($"Opening config file...'{configFile}'");
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -18,18 +19,15 @@ public class GitRepoSyncConfigurationManager
 
             return _Instance;
         }
-        set => _Instance = value;
+        set { _Instance = value; }
     }
 
     public GitRepoSyncConfigurationManager()
     {
-
     }
 
     public GitRepoSyncConfigurationManager(string pathToConfigurationFile)
-    {
-        _PathToConfigurationFile = pathToConfigurationFile;
-    }
+    { _PathToConfigurationFile = pathToConfigurationFile; }
 
     private string? _PathToConfigurationFile;
     private static GitRepoSyncConfigurationManager? _Instance;
@@ -41,7 +39,7 @@ public class GitRepoSyncConfigurationManager
         {
             if (_PathToConfigurationFile == null)
             {
-                var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 _PathToConfigurationFile = Path.Combine(userProfilePath, Constants.ExeName, Constants.ConfigFileName);
             }
@@ -49,7 +47,7 @@ public class GitRepoSyncConfigurationManager
             return _PathToConfigurationFile;
         }
 
-        private set => _PathToConfigurationFile = value;
+        private set { _PathToConfigurationFile = value; }
     }
 
     public GitRepoSyncConfiguration? Get(string name = Constants.DefaultConfigurationName)
@@ -65,9 +63,9 @@ public class GitRepoSyncConfigurationManager
         }
         else
         {
-            var json = File.ReadAllText(PathToConfigurationFile);
+            string json = File.ReadAllText(PathToConfigurationFile);
 
-            var configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
+            GitRepoSyncConfiguration[]? configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
 
             if (configs == null || configs.Length == 0)
             {
@@ -75,7 +73,7 @@ public class GitRepoSyncConfigurationManager
             }
             else
             {
-                var match = configs.Where(x => x.Name == name).FirstOrDefault();
+                GitRepoSyncConfiguration? match = configs.Where(x => x.Name == name).FirstOrDefault();
 
                 return match;
             }
@@ -90,9 +88,9 @@ public class GitRepoSyncConfigurationManager
         }
         else
         {
-            var json = File.ReadAllText(PathToConfigurationFile);
+            string json = File.ReadAllText(PathToConfigurationFile);
 
-            var configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
+            GitRepoSyncConfiguration[]? configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
 
             if (configs == null || configs.Length == 0)
             {
@@ -120,9 +118,9 @@ public class GitRepoSyncConfigurationManager
 
         if (File.Exists(PathToConfigurationFile) == true)
         {
-            var json = File.ReadAllText(PathToConfigurationFile);
+            string json = File.ReadAllText(PathToConfigurationFile);
 
-            var configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
+            GitRepoSyncConfiguration[]? configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
 
             if (configs == null || configs.Length == 0)
             {
@@ -138,7 +136,7 @@ public class GitRepoSyncConfigurationManager
             configurations = new List<GitRepoSyncConfiguration>();
         }
 
-        var match = configurations.Where(x => x.Name == config.Name).FirstOrDefault();
+        GitRepoSyncConfiguration? match = configurations.Where(x => x.Name == config.Name).FirstOrDefault();
 
         if (match != null)
         {
@@ -164,9 +162,9 @@ public class GitRepoSyncConfigurationManager
 
         if (File.Exists(PathToConfigurationFile) == true)
         {
-            var json = File.ReadAllText(PathToConfigurationFile);
+            string json = File.ReadAllText(PathToConfigurationFile);
 
-            var configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
+            GitRepoSyncConfiguration[]? configs = JsonSerializer.Deserialize<GitRepoSyncConfiguration[]>(json);
 
             if (configs == null || configs.Length == 0)
             {
@@ -182,7 +180,7 @@ public class GitRepoSyncConfigurationManager
             configurations = new List<GitRepoSyncConfiguration>();
         }
 
-        var match = configurations.Where(x => x.Name == configName).FirstOrDefault();
+        GitRepoSyncConfiguration? match = configurations.Where(x => x.Name == configName).FirstOrDefault();
 
         if (match != null)
         {
@@ -194,7 +192,7 @@ public class GitRepoSyncConfigurationManager
 
     private void Save(List<GitRepoSyncConfiguration> configurations)
     {
-        var dirName = Path.GetDirectoryName(PathToConfigurationFile);
+        string? dirName = Path.GetDirectoryName(PathToConfigurationFile);
 
         if (dirName == null)
         {
@@ -206,7 +204,7 @@ public class GitRepoSyncConfigurationManager
             Directory.CreateDirectory(dirName);
         }
 
-        var json = JsonSerializer.Serialize<GitRepoSyncConfiguration[]>(configurations.ToArray());
+        string json = JsonSerializer.Serialize<GitRepoSyncConfiguration[]>(configurations.ToArray());
 
         File.WriteAllText(PathToConfigurationFile, json);
     }

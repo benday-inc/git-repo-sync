@@ -1,14 +1,10 @@
-﻿using System;
+﻿using Benday.CommandsFramework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-
-using Benday.CommandsFramework;
-
-using Microsoft.VisualBasic;
 
 namespace Benday.GitRepoSync.Api
 {
@@ -17,20 +13,18 @@ namespace Benday.GitRepoSync.Api
     //Description = "Reads existing Git repositories and outputs configuration information to console.")]
     public class ExportCloneGitReposCommand : SynchronousCommand
     {
-
-        public ExportCloneGitReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) :
-            base(info, outputProvider)
+        public ExportCloneGitReposCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
+            info,
+            outputProvider)
         {
-
         }
 
 
         public override ArgumentCollection GetArguments()
         {
-            var args = new ArgumentCollection();
+            ArgumentCollection args = new ArgumentCollection();
 
-            args.AddString(Constants.ArgumentNameFromPath)
-                .WithDescription("Starting path");
+            args.AddString(Constants.ArgumentNameFromPath).WithDescription("Starting path");
 
             return args;
         }
@@ -43,19 +37,18 @@ namespace Benday.GitRepoSync.Api
 
             if (Directory.Exists(baseDir) == true)
             {
-                var dirs = Directory.EnumerateDirectories(baseDir);
+                IEnumerable<string> dirs = Directory.EnumerateDirectories(baseDir);
 
-                builder.AppendLine("mkdir " + baseDir);
-                builder.AppendLine("cd " + baseDir);
+                builder.AppendLine($"mkdir {baseDir}");
+                builder.AppendLine($"cd {baseDir}");
 
-                foreach (var dir in dirs)
+                foreach (string dir in dirs)
                 {
-                    var remote = GetGitRepoRemote(dir).Trim();
+                    string remote = GetGitRepoRemote(dir).Trim();
 
-                    if (String.IsNullOrWhiteSpace(remote) == false)
+                    if (string.IsNullOrWhiteSpace(remote) == false)
                     {
-                        builder.AppendLine(
-                            "git clone " + remote);
+                        builder.AppendLine($"git clone {remote}");
                     }
                 }
 
@@ -71,7 +64,7 @@ namespace Benday.GitRepoSync.Api
 
         private static string GetGitRepoRemote(string dir)
         {
-            var temp = new ProcessStartInfo
+            ProcessStartInfo temp = new ProcessStartInfo
             {
                 WorkingDirectory = dir,
 
@@ -85,19 +78,20 @@ namespace Benday.GitRepoSync.Api
                 RedirectStandardOutput = true
             };
 
-            var process = Process.Start(temp) ?? throw new InvalidOperationException($"Null process start return value.");
+            Process process = Process.Start(temp) ??
+                throw new InvalidOperationException($"Null process start return value.");
 
             process.WaitForExit();
 
-            var output = process.StandardOutput.ReadLine();
+            string? output = process.StandardOutput.ReadLine();
 
             if (output != null)
             {
-                output = output.Replace("origin	", String.Empty).Replace(" (fetch)", String.Empty);
+                output = output.Replace("origin	", string.Empty).Replace(" (fetch)", string.Empty);
 
                 if (output.Contains('\t') == true)
                 {
-                    var tokens = output.Split('\t');
+                    string[] tokens = output.Split('\t');
 
                     output = tokens.Last();
                 }
@@ -109,7 +103,5 @@ namespace Benday.GitRepoSync.Api
                 return string.Empty;
             }
         }
-
-
     }
 }

@@ -38,7 +38,10 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions()
+        {
+            ApplicationName = "Benday.GitRepoSync.Api"
+        }).GetAllCommandUsages(assembly);
 
         // act
         var actual = SystemUnderTest.Format(usages, false);
@@ -62,7 +65,10 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions()
+        {
+            ApplicationName = "Benday.GitRepoSync.Api"
+        }).GetAllCommandUsages(assembly);
 
         // act
         var actual = SystemUnderTest.Format(usages, true);
@@ -86,7 +92,7 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions() { ApplicationName = "Benday.GitRepoSync.Api" }).GetAllCommandUsages(assembly);
 
         var solutionDir = GetPathToSolutionRootDirectory();
 
