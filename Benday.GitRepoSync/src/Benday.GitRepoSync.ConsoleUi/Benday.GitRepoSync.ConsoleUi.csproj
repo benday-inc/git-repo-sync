@@ -18,11 +18,11 @@
 	</ItemGroup>
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>gitreposync</Title>
 		<Authors>benday</Authors>
-		<Copyright>2023</Copyright>
+		<Copyright>2024</Copyright>
 		<PackageIcon>bdc_mark_128_128.png</PackageIcon>
 		<PackageReadmeFile>README-for-nuget.md</PackageReadmeFile>
 		<PackAsTool>True</PackAsTool>
@@ -35,9 +35,9 @@
 		<RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-		<AssemblyVersion>2.4.0.0</AssemblyVersion>
+		<AssemblyVersion>2.5.0.0</AssemblyVersion>
         <AssemblyName>gitreposync</AssemblyName>
-		<Version>$(VersionPrefix)2.4.0</Version>
+		<Version>$(VersionPrefix)2.5.0</Version>
 		<Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
 
 	</PropertyGroup>
