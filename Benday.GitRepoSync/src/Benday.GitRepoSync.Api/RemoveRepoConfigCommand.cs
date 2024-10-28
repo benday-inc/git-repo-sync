@@ -1,5 +1,3 @@
-using Benday.CommandsFramework;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
+using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
@@ -81,7 +81,7 @@ public class RemoveRepoConfigCommand : GitRepoConfigurationCommandBase
         else
         {
             WriteLine($"Repository '{repositoryUrl}' isn't configured.");
-        }        
+        }
     }
 
     private void WriteToDisk(List<RepositoryInfo> repos)
@@ -111,7 +111,7 @@ public class RemoveRepoConfigCommand : GitRepoConfigurationCommandBase
 
 
         foreach (var repo in repos)
-        {           
+        {
             builder.AppendLine(
             $"{repo.IsQuickSync}," +
             $"{repo.Category.Replace(",", " ")}," +

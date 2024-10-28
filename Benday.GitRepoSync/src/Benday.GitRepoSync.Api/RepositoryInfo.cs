@@ -25,8 +25,8 @@ namespace Benday.GitRepoSync.Api
 
         public bool MatchesFilter(string filter)
         {
-            return ContainsFilterCaseInsensitive(Category, filter) || 
-                ContainsFilterCaseInsensitive(GitUrl, filter) || 
+            return ContainsFilterCaseInsensitive(Category, filter) ||
+                ContainsFilterCaseInsensitive(GitUrl, filter) ||
                 ContainsFilterCaseInsensitive(RepositoryName, filter);
         }
     }

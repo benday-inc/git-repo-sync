@@ -13,7 +13,7 @@ public static class ExtensionMethods
         }
 
         var argsClone = execInfo.Arguments.ToDictionary(entry => entry.Key, entry => entry.Value);
-        
+
         var returnValue = new CommandExecutionInfo();
         returnValue.Arguments = argsClone;
         returnValue.CommandName = commandName;

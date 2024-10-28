@@ -1,8 +1,8 @@
-﻿using Benday.CommandsFramework;
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+
+using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
@@ -45,7 +45,7 @@ public class QuickSyncCommand : GitRepoConfigurationCommandBase
             Constants.ArgumentNameSingleThreaded);
 
         var newArgs = this.ExecutionInfo.GetCloneOfArguments(
-            Constants.CommandArgumentNameUpdateAllRepos);        
+            Constants.CommandArgumentNameUpdateAllRepos);
 
         newArgs.AddArgumentValue(
             Constants.ArgumentNameConfigurationName,

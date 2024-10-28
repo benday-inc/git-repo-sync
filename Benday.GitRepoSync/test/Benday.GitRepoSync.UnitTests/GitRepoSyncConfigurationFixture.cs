@@ -21,5 +21,5 @@ public class GitRepoSyncConfigurationFixture
 
             return _SystemUnderTest;
         }
-    }    
+    }
 }

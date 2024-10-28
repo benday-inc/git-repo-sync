@@ -209,7 +209,7 @@ namespace Benday.GitRepoSync.Api
                     ParentFolder = tokens[3],
                     GitUrl = tokens[4]
                 };
-                
+
                 return temp;
             }
         }
@@ -325,7 +325,7 @@ namespace Benday.GitRepoSync.Api
             var output = process.StandardOutput.ReadLine();
 
             if (output == null ||
-                output.Contains("not a git repository") == true) 
+                output.Contains("not a git repository") == true)
             {
                 throw new KnownException($"Directory '{dir}' is not a git repository");
             }
@@ -339,7 +339,7 @@ namespace Benday.GitRepoSync.Api
                 {
                     output = output.Replace('/', '\\');
                     return output;
-                }                
+                }
             }
         }
 

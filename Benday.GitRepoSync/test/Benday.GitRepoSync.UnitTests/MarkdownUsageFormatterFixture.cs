@@ -1,8 +1,10 @@
-﻿using Benday.CommandsFramework;
-using Benday.GitRepoSync.Api;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
+
+using Benday.CommandsFramework;
+using Benday.GitRepoSync.Api;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Benday.GitRepoSync.UnitTests;
 
@@ -36,7 +38,7 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility().GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
 
         // act
         var actual = SystemUnderTest.Format(usages, false);
@@ -60,7 +62,7 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility().GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
 
         // act
         var actual = SystemUnderTest.Format(usages, true);
@@ -84,7 +86,7 @@ public class MarkdownUsageFormatterFixture
         // arrange
         var assembly = typeof(Constants).Assembly;
 
-        var usages = new CommandAttributeUtility().GetAllCommandUsages(assembly);
+        var usages = new CommandAttributeUtility(new DefaultProgramOptions()).GetAllCommandUsages(assembly);
 
         var solutionDir = GetPathToSolutionRootDirectory();
 
@@ -115,7 +117,7 @@ public class MarkdownUsageFormatterFixture
             readmeHeader + Environment.NewLine + readmeCommandsForNuget
             );
 
-        
+
 
         File.WriteAllText(pathToGitHubReadme,
             readmeHeader + Environment.NewLine + readmeCommandsForGitHub

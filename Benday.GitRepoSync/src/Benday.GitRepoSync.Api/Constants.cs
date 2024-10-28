@@ -43,7 +43,7 @@ namespace Benday.GitRepoSync.Api
         public const string ArgumentNameParentDir = "parentdir";
 
         public const string ArgumentNameConfigurationName = "config";
-        public const string ArgumentNameConfigurationFile = "filename";        
-        public const string ArgumentNameCodeDirectory = "codedir";        
+        public const string ArgumentNameConfigurationFile = "filename";
+        public const string ArgumentNameCodeDirectory = "codedir";
     }
 }

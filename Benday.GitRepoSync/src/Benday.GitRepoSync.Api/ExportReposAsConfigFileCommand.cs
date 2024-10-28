@@ -1,4 +1,3 @@
-using Benday.CommandsFramework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
+using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api
 {
@@ -35,7 +36,7 @@ namespace Benday.GitRepoSync.Api
 
             args.AddString(Constants.ArgumentNameToFileName)
                 .AsNotRequired()
-                .WithDescription("Writes configuration to file name");                
+                .WithDescription("Writes configuration to file name");
 
             return args;
         }
@@ -45,7 +46,7 @@ namespace Benday.GitRepoSync.Api
             var baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
             var codeDirArgValue = Arguments.GetStringValue(Constants.ArgumentNameCodeFolderPath);
             var category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
-            
+
             if (Path.IsPathFullyQualified(baseDir) == false)
             {
                 baseDir = Path.Combine(Environment.CurrentDirectory, baseDir);

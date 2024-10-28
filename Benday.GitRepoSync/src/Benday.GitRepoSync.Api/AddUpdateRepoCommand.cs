@@ -1,5 +1,3 @@
-using Benday.CommandsFramework;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
+using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
@@ -134,7 +134,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
             WriteLine("*** ADDING REPOSITORY ***");
         }
 
-        
+
         WriteRepositoryInfo(repo);
 
         WriteToDisk(repos);
@@ -235,7 +235,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
 
 
         foreach (var repo in repos)
-        {           
+        {
             builder.AppendLine(
             $"{repo.IsQuickSync}," +
             $"{repo.Category.Replace(",", " ")}," +

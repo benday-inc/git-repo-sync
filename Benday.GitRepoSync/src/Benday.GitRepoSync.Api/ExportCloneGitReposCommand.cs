@@ -1,12 +1,14 @@
-﻿using Benday.CommandsFramework;
-using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
+using Benday.CommandsFramework;
+
+using Microsoft.VisualBasic;
 
 namespace Benday.GitRepoSync.Api
 {
@@ -34,7 +36,7 @@ namespace Benday.GitRepoSync.Api
         }
 
         protected override void OnExecute()
-        {            
+        {
             string baseDir = Arguments.GetStringValue(Constants.ArgumentNameFromPath);
 
             StringBuilder builder = new();

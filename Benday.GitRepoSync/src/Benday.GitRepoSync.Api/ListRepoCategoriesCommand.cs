@@ -1,9 +1,9 @@
-﻿using Benday.CommandsFramework;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+
+using Benday.CommandsFramework;
 
 namespace Benday.GitRepoSync.Api;
 
@@ -46,5 +46,5 @@ public class ListRepoCategoriesCommand : GitRepoConfigurationCommandBase
         {
             WriteLine($"{item}");
         }
-    }    
+    }
 }
