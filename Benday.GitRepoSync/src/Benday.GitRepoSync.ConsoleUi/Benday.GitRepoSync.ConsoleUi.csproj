@@ -39,6 +39,7 @@
         <AssemblyName>gitreposync</AssemblyName>
 		<Version>$(VersionPrefix)2.5.0</Version>
 		<Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
+		<PackageReleaseNotes>v2.5 - Package updates &amp; minor bug fixes</PackageReleaseNotes>
 
 	</PropertyGroup>
 </Project>

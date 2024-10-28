@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{207E7309-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51EA8F2C-2750-43AE-AA3D-CA06A9054674}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		..\bdc_mark_128_128.png = ..\bdc_mark_128_128.png
 		..\install.ps1 = ..\install.ps1
 		..\install.sh = ..\install.sh

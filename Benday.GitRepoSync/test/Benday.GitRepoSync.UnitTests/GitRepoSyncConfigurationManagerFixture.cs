@@ -52,8 +52,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         var expectedConfigurationName = Constants.DefaultConfigurationName;
         var expectedToken = "token-value";
-        var expectedUrl = "https://dev.azure.com/benday/";
-
+        
         var config = new GitRepoSyncConfiguration()
         {
             ConfigurationFilePath = expectedToken,
@@ -84,8 +83,7 @@ public class GitRepoSyncConfigurationManagerFixture
 
         var expectedConfigurationName = "config123";
         var expectedToken = "token-value";
-        var expectedUrl = "https://dev.azure.com/benday/";
-
+        
         var config = new GitRepoSyncConfiguration()
         {
             ConfigurationFilePath = expectedToken,
