@@ -13,7 +13,7 @@
 		<ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Benday.CommandsFramework" Version="2.1.0" />
+		<PackageReference Include="Benday.CommandsFramework" Version="4.3.0" />
 		<PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
 	</ItemGroup>
 	<PropertyGroup>
