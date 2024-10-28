@@ -5,7 +5,28 @@ list of repos on a new machine?
 
 This utility helps you to manage that mess. 
 
-### Key features:
+A collection of utilities for working with .NET Core Solutions and Projects.
+
+Written by Benjamin Day  
+Pluralsight Author | Microsoft MVP | Scrum.org Professional Scrum Trainer  
+[https://www.benday.com](https://www.benday.com)
+
+[https://www.slidespeaker.ai](https://www.slidespeaker.ai)
+
+[info@benday.com](mailto:info@benday.com) 
+
+YouTube: [https://www.youtube.com/@_benday](https://www.youtube.com/@_benday)
+
+*Got ideas for utilities you'd like to see? Found a bug? Let us know by submitting an issue https://github.com/benday-inc/git-repo-sync/issues*. *Want to contribute? Submit a pull request.*
+
+## Installing
+The slnutil is distributed as a .NET Core Tool via NuGet. To install it go to the command prompt and type  
+`dotnet tool install gitreposync -g`
+
+### Prerequisites
+- You'll need to install .NET Core 8 from https://dotnet.microsoft.com/
+
+## Key features:
 - Quickly sync all your git repos or just a subset of your repos with a single command. The tool decides whether to do a 'git clone' or a 'git pull'
 - Use a config file to define all the git repos you care about
 - Take your existing mess of git repos and script it all into a config file
@@ -14,22 +35,6 @@ This utility helps you to manage that mess.
 - Quickly sync all your 'quick sync' repos
 - Quickly sync just a category of repos
 
-### About
-
-Written by Benjamin Day  
-Pluralsight Author | Microsoft MVP | Scrum.org Professional Scrum Trainer  
-https://www.benday.com  
-info@benday.com 
-
-*Got ideas for git repo sync features you'd like to see? Found a bug? 
-Let us know by submitting an issue https://github.com/benday-inc/git-repo-sync/issues*. *Want to contribute? Submit a pull request.*
-
-## Installing
-The gitreposync is distributed as a .NET Core Tool via NuGet. To install it go to the command prompt and type  
-`dotnet tool install gitreposync -g`
-
-### Prerequisites
-- You'll need to install .NET Core 7 from https://dotnet.microsoft.com/
 
 ## Getting Started: Configuration
 Everything starts with a configuration. After you've installed gitreposync, you'll need to 
@@ -137,6 +142,15 @@ using multiple cores/processors, it'll probably run a bit faster.
 | removeconfig | Remove a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory. |
 | removerepo | Remove a repo from the list of configured repositories. NOTE: Repository URL is the unique identifier |
 | update | Performs a 'git clone' or 'git pull' for each configured git repository. |
+| get-configuration | Display all configuration values or a specific configuration value |
+| remove-configuration | Remove a configuration value |
+| set-configuration | Set a configuration value |
+| get-configuration | Display all configuration values or a specific configuration value |
+| remove-configuration | Remove a configuration value |
+| set-configuration | Set a configuration value |
+| get-configuration | Display all configuration values or a specific configuration value |
+| remove-configuration | Remove a configuration value |
+| set-configuration | Set a configuration value |
 ## addconfig
 **Add or update a git repo sync configuration. A git repo sync configuration is the list of repositories you care about plus your local code directory.**
 ### Arguments
@@ -229,3 +243,60 @@ using multiple cores/processors, it'll probably run a bit faster.
 | category | Optional | String | Filter repos by category value. NOTE: this matches by full string |
 | quicksync | Optional | Boolean | Filter repos by 'quick sync' value |
 | parallel | Optional | Boolean | EXPERIMENTAL: runs the repo synchronizations in parallel. It runs a lot faster but the messages written to the console WILL definitely be a mess. |
+## get-configuration
+**Display all configuration values or a specific configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Optional | String | Name of the configuration name to display |
+## remove-configuration
+**Remove a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration name to display |
+## set-configuration
+**Set a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration value to set |
+| value | Required | String | Value of the configuration |
+## get-configuration
+**Display all configuration values or a specific configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Optional | String | Name of the configuration name to display |
+## remove-configuration
+**Remove a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration name to display |
+## set-configuration
+**Set a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration value to set |
+| value | Required | String | Value of the configuration |
+## get-configuration
+**Display all configuration values or a specific configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Optional | String | Name of the configuration name to display |
+## remove-configuration
+**Remove a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration name to display |
+## set-configuration
+**Set a configuration value**
+### Arguments
+| Argument | Is Optional | Data Type | Description |
+| --- | --- | --- | --- |
+| name | Required | String | Name of the configuration value to set |
+| value | Required | String | Value of the configuration |
