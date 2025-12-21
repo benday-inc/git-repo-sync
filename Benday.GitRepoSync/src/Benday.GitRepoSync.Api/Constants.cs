@@ -16,6 +16,7 @@ public static class Constants
     public const string CommandArgumentNameGetRepoInfo = "info";
     public const string CommandArgumentNameListCategories = "listcategories";
     public const string CommandArgumentNameOpenRepoConfigFile = "openconfig";
+    public const string CommandArgumentNameCheckRepoStatus = "status";
 
     public const string ConfigFileName = "gitreposync-config.json";
     public const string DefaultConfigurationName = "(default)";
