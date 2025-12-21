@@ -1,45 +1,45 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<ItemGroup>
-		<None Include="..\..\..\bdc_mark_128_128.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-		<None Include="..\..\..\README-for-nuget.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Benday.CommandsFramework" Version="4.3.0" />
-		<PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-	</ItemGroup>
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>gitreposync</Title>
-		<Authors>benday</Authors>
-		<Copyright>2024</Copyright>
-		<PackageIcon>bdc_mark_128_128.png</PackageIcon>
-		<PackageReadmeFile>README-for-nuget.md</PackageReadmeFile>
-		<PackAsTool>True</PackAsTool>
-		
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-
-		<PackageProjectUrl>https://github.com/benday-inc/git-repo-sync</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-
-		<AssemblyVersion>2.5.0.0</AssemblyVersion>
-        <AssemblyName>gitreposync</AssemblyName>
-		<Version>$(VersionPrefix)2.5.0</Version>
-		<Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
-		<PackageReleaseNotes>v2.5 - Package updates &amp; minor bug fixes</PackageReleaseNotes>
-
-	</PropertyGroup>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Include="..\..\..\bdc_mark_128_128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\..\README-for-nuget.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Benday.CommandsFramework" Version="4.*" />    
+  </ItemGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>gitreposync</Title>
+    <Authors>benday</Authors>
+    <Copyright>2025 - Benjamin Day Consulting, Inc.</Copyright>
+    <PackageIcon>bdc_mark_128_128.png</PackageIcon>
+    <PackageReadmeFile>README-for-nuget.md</PackageReadmeFile>
+    <PackAsTool>True</PackAsTool>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <PackageProjectUrl>https://github.com/benday-inc/git-repo-sync</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <TheVersion>2.6.0</TheVersion>
+    <AssemblyVersion>$(TheVersion)</AssemblyVersion>
+    <AssemblyName>gitreposync</AssemblyName>
+    <Version>$(TheVersion)</Version>
+    <Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
+    <PackageReleaseNotes>
+v2.6 - Adding 'status' command to show status across multiple repos; Adding .net 10 support;
+v2.5 - Package updates &amp; minor bug fixes</PackageReleaseNotes>
+  </PropertyGroup>
 </Project>

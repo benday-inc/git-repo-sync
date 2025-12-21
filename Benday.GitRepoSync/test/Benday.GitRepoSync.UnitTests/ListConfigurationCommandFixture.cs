@@ -96,9 +96,9 @@ public class ListConfigurationCommandFixture
         var output = OutputProvider.GetOutput();
         Console.WriteLine(output);
 
-        Assert.IsTrue(output.Contains("Configuration File: token2"), "didn't find token2 in output");
-        Assert.IsTrue(output.Contains("Code Directory: codedirvalue"), "didn't find codedirvalue in output");
-        Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
+        Assert.Contains("Configuration File: token2", output, "didn't find token2 in output");
+        Assert.Contains("Code Directory: codedirvalue", output, "didn't find codedirvalue in output");
+        Assert.Contains("Name: config2", output, "didn't find config2 in output");
     }
 
     [TestMethod]
@@ -138,9 +138,9 @@ public class ListConfigurationCommandFixture
         var output = OutputProvider.GetOutput();
         Console.WriteLine(output);
 
-        Assert.IsTrue(output.Contains("Configuration File: token2"), "didn't find token2 in output");
-        Assert.IsTrue(output.Contains("Code Directory: codedirvalue"), "didn't find codedirvalue in output");
-        Assert.IsTrue(output.Contains("Name: config2"), "didn't find config2 in output");
+        Assert.Contains("Configuration File: token2", output, "didn't find token2 in output");
+        Assert.Contains("Code Directory: codedirvalue", output, "didn't find codedirvalue in output");
+        Assert.Contains("Name: config2", output, "didn't find config2 in output");
     }
 
     [TestMethod]
@@ -149,7 +149,7 @@ public class ListConfigurationCommandFixture
         // arrange
         Utilities.AssertFileDoesNotExist(ConfigurationManager.PathToConfigurationFile);
 
-        Assert.AreEqual<int>(0, ConfigurationManager.GetAll().Length, "There should not be any configs at start of test.");
+        Assert.IsEmpty(ConfigurationManager.GetAll(), "There should not be any configs at start of test.");
 
         var commandLineArgs = Utilities.GetStringArray(
             Constants.CommandArgumentNameListConfig);
@@ -165,6 +165,6 @@ public class ListConfigurationCommandFixture
         var output = OutputProvider.GetOutput();
         Console.WriteLine(output);
 
-        Assert.IsTrue(output.Contains("No configurations"), "didn't find message in output");
+        Assert.Contains("No configurations", output, "didn't find message in output");
     }
 }

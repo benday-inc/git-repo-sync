@@ -155,6 +155,6 @@ public class GitRepoSyncConfigurationManagerFixture
 
         // assert
         Assert.IsNotNull(actual);
-        Assert.AreEqual<int>(2, actual.Length, "Config count was wrong.");
+        Assert.HasCount(2, actual, "Config count was wrong.");
     }
 }
