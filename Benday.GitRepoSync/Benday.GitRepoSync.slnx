@@ -1,0 +1,29 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/misc/">
+    <File Path="../misc/readme-header.md" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../bdc_mark_128_128.png" />
+    <File Path="../install.ps1" />
+    <File Path="../install.sh" />
+    <File Path="../LICENSE" />
+    <File Path="../README-for-nuget.md" />
+    <File Path="../README.md" />
+    <File Path="../uninstall.ps1" />
+    <File Path="../uninstall.sh" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Benday.GitRepoSync.Api/Benday.GitRepoSync.Api.csproj" />
+    <Project Path="src/Benday.GitRepoSync.ConsoleUi/Benday.GitRepoSync.ConsoleUi.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Benday.GitRepoSync.UnitTests/Benday.GitRepoSync.UnitTests.csproj" />
+  </Folder>
+</Solution>

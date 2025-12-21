@@ -32,7 +32,13 @@
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <PackageProjectUrl>https://github.com/benday-inc/git-repo-sync</PackageProjectUrl>
     <RepositoryUrl>https://github.com/benday-inc/git-repo-sync.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>git;repository;sync;clone;pull;devops;cli</PackageTags>
+    <ToolCommandName>gitreposync</ToolCommandName>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TheVersion>2.6.0</TheVersion>
     <AssemblyVersion>$(TheVersion)</AssemblyVersion>
     <AssemblyName>gitreposync</AssemblyName>
