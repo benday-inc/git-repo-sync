@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Benday.GitRepoSync.Api;
@@ -40,6 +41,8 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
     }
 
 
+    private int _TotalRepoCount = 0;
+
     protected override void OnExecute()
     {
         ValidateConfiguration();
@@ -54,7 +57,7 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
         List<RepositoryInfo> repos = GetMatchingRepositories();
 
-        int totalCount = repos.Count;
+        _TotalRepoCount = repos.Count;
 
         int currentNumber = 0;
 
@@ -66,23 +69,23 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
                 repos,
                 repo =>
                 {
-                    UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
-                    currentNumber++;
+                    var repoNumber = Interlocked.Increment(ref currentNumber);
+                    UpdateRepo(repo, codeFolderPath, repoNumber);                    
                 });
         }
         else
         {
             foreach (RepositoryInfo repo in repos)
             {
-                UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
+                UpdateRepo(repo, codeFolderPath, currentNumber);
                 currentNumber++;
             }
         }
     }
 
-    private void UpdateRepo(RepositoryInfo repo, string codeFolderPath, int currentNumber, int totalCount)
+    private void UpdateRepo(RepositoryInfo repo, string codeFolderPath, int currentNumber)
     {
-        WriteLine($"Processing repo {currentNumber} of {totalCount}: {repo.RepositoryName}...");
+        WriteLine($"Processing repo {currentNumber} of {_TotalRepoCount}: {repo.RepositoryName}...");
 
         string parentFolder = ReplaceCodeVariable(repo.ParentFolder, codeFolderPath);
 
@@ -100,8 +103,6 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
     private void CloneRepo(RepositoryInfo repo, string parentFolder)
     {
-        WriteLine($"Cloning {repo.RepositoryName} into {parentFolder}...");
-
         if (Directory.Exists(parentFolder) == false)
         {
             Directory.CreateDirectory(parentFolder);
@@ -117,8 +118,6 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
     private void SyncRepo(RepositoryInfo repo, string repoFolder)
     {
-        WriteLine($"Getting changes for {repo.RepositoryName}...");
-
         var pullCommand = new ProcessStartInfo("git", $"pull") { WorkingDirectory = repoFolder };
 
         RunGitCommand(repo, pullCommand, "pull");
@@ -135,7 +134,7 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
         if (result.IsSuccess == true)
         {
-            WriteLine($"Successfully called '{gitCommandName}' {repo.RepositoryName}.");
+            // WriteLine($"Successfully called '{gitCommandName}' {repo.RepositoryName}.");
         }
         else if (result.IsError == true)
         {
