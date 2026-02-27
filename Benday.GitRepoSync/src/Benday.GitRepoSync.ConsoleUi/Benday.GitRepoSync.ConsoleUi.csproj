@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Benday.GitRepoSync.Api\Benday.GitRepoSync.Api.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Benday.CommandsFramework" Version="4.*" />    
+    <PackageReference Include="Benday.CommandsFramework" Version="4.13.0" />    
   </ItemGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -22,7 +22,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>gitreposync</Title>
     <Authors>benday</Authors>
-    <Copyright>2025 - Benjamin Day Consulting, Inc.</Copyright>
+    <Copyright>2026 - Benjamin Day Consulting, Inc.</Copyright>
     <PackageIcon>bdc_mark_128_128.png</PackageIcon>
     <PackageReadmeFile>README-for-nuget.md</PackageReadmeFile>
     <PackAsTool>True</PackAsTool>
@@ -39,12 +39,13 @@
     <ToolCommandName>gitreposync</ToolCommandName>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TheVersion>2.6.0</TheVersion>
+    <TheVersion>2.7.0</TheVersion>
     <AssemblyVersion>$(TheVersion)</AssemblyVersion>
     <AssemblyName>gitreposync</AssemblyName>
     <Version>$(TheVersion)</Version>
     <Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
     <PackageReleaseNotes>
+v2.7 - Updating nuget packages and adjusting how the tool calls git to work better in parallel mode;
 v2.6 - Adding 'status' command to show status across multiple repos; Adding .net 10 support;
 v2.5 - Package updates &amp; minor bug fixes</PackageReleaseNotes>
   </PropertyGroup>
