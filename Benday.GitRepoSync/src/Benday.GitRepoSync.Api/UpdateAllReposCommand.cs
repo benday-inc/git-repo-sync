@@ -1,4 +1,5 @@
 using Benday.CommandsFramework;
+using Benday.Common;
 
 using System;
 using System.Collections.Generic;
@@ -73,8 +74,6 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         {
             foreach (RepositoryInfo repo in repos)
             {
-                // DebugRepoInfo(codeFolderPath, repo);
-
                 UpdateRepo(repo, codeFolderPath, currentNumber, totalCount);
                 currentNumber++;
             }
@@ -108,27 +107,49 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
             Directory.CreateDirectory(parentFolder);
         }
 
-        ProcessStartInfo cloneCommand = new ProcessStartInfo("git", $"clone {repo.GitUrl}")
+        var cloneCommand = new ProcessStartInfo("git", $"clone {repo.GitUrl}")
         {
             WorkingDirectory = parentFolder
         };
 
-        var process = Process.Start(cloneCommand) ?? throw new InvalidOperationException();
-
-        process.WaitForExit();
+        RunGitCommand(repo, cloneCommand, "clone");
     }
 
     private void SyncRepo(RepositoryInfo repo, string repoFolder)
     {
         WriteLine($"Getting changes for {repo.RepositoryName}...");
 
-        ProcessStartInfo pullCommand = new ProcessStartInfo("git", $"pull") { WorkingDirectory = repoFolder };
+        var pullCommand = new ProcessStartInfo("git", $"pull") { WorkingDirectory = repoFolder };
 
-        var process = Process.Start(pullCommand) ?? throw new InvalidOperationException();
-
-        process.WaitForExit();
+        RunGitCommand(repo, pullCommand, "pull");
     }
 
+    private void RunGitCommand(
+        RepositoryInfo repo, 
+        ProcessStartInfo pullCommand,
+        string gitCommandName)
+    {
+        var runner = new ProcessRunner(pullCommand);
+
+        var result = runner.Run();
+
+        if (result.IsSuccess == true)
+        {
+            WriteLine($"Successfully called '{gitCommandName}' {repo.RepositoryName}.");
+        }
+        else if (result.IsError == true)
+        {
+            WriteLine($"Error calling '{gitCommandName}' for {repo.RepositoryName}: {result.ErrorText}");
+        }
+        else if (result.IsTimeout == true)
+        {
+            WriteLine($"Timeout calling '{gitCommandName}' for {repo.RepositoryName}.");
+        }
+        else
+        {
+            WriteLine($"Unknown result calling '{gitCommandName}' for {repo.RepositoryName}.");
+        }
+    }
 
     private string ReplaceCodeVariable(string parentFolder, string codeFolderPath)
     { return parentFolder.Replace(Constants.CodeDirVariable, codeFolderPath); }

@@ -6,5 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Benday.CommandsFramework" Version="4.13.0" />
+    <PackageReference Include="Benday.Common" Version="9.10.0" />
   </ItemGroup>
 </Project>
