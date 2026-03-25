@@ -39,12 +39,13 @@
     <ToolCommandName>gitreposync</ToolCommandName>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TheVersion>2.7.0</TheVersion>
+    <TheVersion>2.8.0</TheVersion>
     <AssemblyVersion>$(TheVersion)</AssemblyVersion>
     <AssemblyName>gitreposync</AssemblyName>
     <Version>$(TheVersion)</Version>
     <Description>Manage, clone, sync and organize all your git repos on one or multiple machines.</Description>
     <PackageReleaseNotes>
+v2.8 - Adding better error handling for command timeouts on large repos;
 v2.7 - Updating nuget packages and adjusting how the tool calls git to work better in parallel mode;
 v2.6 - Adding 'status' command to show status across multiple repos; Adding .net 10 support;
 v2.5 - Package updates &amp; minor bug fixes</PackageReleaseNotes>

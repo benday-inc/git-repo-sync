@@ -2,6 +2,7 @@ using Benday.CommandsFramework;
 using Benday.Common;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -42,12 +43,13 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
 
 
     private int _TotalRepoCount = 0;
+    private readonly ConcurrentBag<string> _FailedOperations = new ConcurrentBag<string>();
 
     protected override void OnExecute()
     {
         ValidateConfiguration();
 
-        bool runMultithreaded = Arguments.HasValue(Constants.ArgumentNameParallel);
+        bool runMultithreaded = Arguments.GetBooleanValue(Constants.ArgumentNameParallel);
         string codeFolderPath = GetCodeDir();
 
         WriteLine($"Configuration name: {GetConfigurationName()}");
@@ -58,6 +60,7 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         List<RepositoryInfo> repos = GetMatchingRepositories();
 
         _TotalRepoCount = repos.Count;
+        _FailedOperations.Clear();
 
         int currentNumber = 0;
 
@@ -79,6 +82,16 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
             {
                 UpdateRepo(repo, codeFolderPath, currentNumber);
                 currentNumber++;
+            }
+        }
+
+        WriteLine(string.Empty);
+        if (_FailedOperations.Count > 0)
+        {
+            WriteLine("=== FAILED OPERATIONS ===");
+            foreach (var failedOp in _FailedOperations.OrderBy(x => x))
+            {
+                WriteLine(failedOp);
             }
         }
     }
@@ -128,25 +141,97 @@ public class UpdateAllReposCommand : GitRepoConfigurationCommandBase
         ProcessStartInfo pullCommand,
         string gitCommandName)
     {
-        var runner = new ProcessRunner(pullCommand);
+        const int maxRetries = 2;
+        const int defaultTimeoutMs = 10000;
+        const int retryTimeoutMs = 30000;
 
-        var result = runner.Run();
+        IProcessRunnerResult? result = null;
+        int currentTimeout = defaultTimeoutMs;
 
-        if (result.IsSuccess == true)
+        for (int attempt = 0; attempt < maxRetries; attempt++)
         {
-            // WriteLine($"Successfully called '{gitCommandName}' {repo.RepositoryName}.");
+            try
+            {
+                var runner = new ProcessRunner(pullCommand);
+                
+                // Try to set a longer timeout on retry
+                if (attempt > 0)
+                {
+                    try
+                    {
+                        var timeoutProperty = runner.GetType().GetProperty("TimeoutMs");
+                        if (timeoutProperty != null && timeoutProperty.CanWrite)
+                        {
+                            timeoutProperty.SetValue(runner, retryTimeoutMs);
+                            currentTimeout = retryTimeoutMs;
+                        }
+                    }
+                    catch
+                    {
+                        // If property doesn't exist, continue with default
+                    }
+                }
+
+                result = runner.Run();
+
+                if (result.IsSuccess || result.IsError)
+                {
+                    // Success or normal error - don't retry
+                    break;
+                }
+                else if (result.IsTimeout && attempt < maxRetries - 1)
+                {
+                    // Timeout occurred - retry with longer timeout
+                    WriteLine($"Timeout on attempt {attempt + 1} calling '{gitCommandName}' for {repo.RepositoryName}. Retrying with {retryTimeoutMs}ms timeout...");
+                    Thread.Sleep(1000); // Brief pause before retry
+                    continue;
+                }
+            }
+            catch (TimeoutException ex)
+            {
+                if (attempt < maxRetries - 1)
+                {
+                    WriteLine($"TimeoutException on attempt {attempt + 1} calling '{gitCommandName}' for {repo.RepositoryName}. Retrying with longer timeout...");
+                    Thread.Sleep(1000);
+                    continue;
+                }
+                else
+                {
+                    _FailedOperations.Add($"[{gitCommandName}] {repo.RepositoryName} - TimeoutException after {maxRetries} attempts: {ex.Message}");
+                    WriteLine($"Failed calling '{gitCommandName}' for {repo.RepositoryName}: TimeoutException after {maxRetries} attempts: {ex.Message}");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _FailedOperations.Add($"[{gitCommandName}] {repo.RepositoryName} - {ex.GetType().Name}: {ex.Message}");
+                WriteLine($"Exception calling '{gitCommandName}' for {repo.RepositoryName}: {ex.GetType().Name}: {ex.Message}");
+                return;
+            }
         }
-        else if (result.IsError == true)
+
+        // Handle final result
+        if (result != null)
         {
-            WriteLine($"Error calling '{gitCommandName}' for {repo.RepositoryName}: {result.ErrorText}");
-        }
-        else if (result.IsTimeout == true)
-        {
-            WriteLine($"Timeout calling '{gitCommandName}' for {repo.RepositoryName}.");
-        }
-        else
-        {
-            WriteLine($"Unknown result calling '{gitCommandName}' for {repo.RepositoryName}.");
+            if (result.IsSuccess)
+            {
+                // WriteLine($"Successfully called '{gitCommandName}' {repo.RepositoryName}.");
+            }
+            else if (result.IsError)
+            {
+                _FailedOperations.Add($"[{gitCommandName}] {repo.RepositoryName} - Error: {result.ErrorText}");
+                WriteLine($"Error calling '{gitCommandName}' for {repo.RepositoryName}: {result.ErrorText}");
+            }
+            else if (result.IsTimeout)
+            {
+                _FailedOperations.Add($"[{gitCommandName}] {repo.RepositoryName} - Process timed out after {currentTimeout}ms");
+                WriteLine($"Timeout calling '{gitCommandName}' for {repo.RepositoryName}.");
+            }
+            else
+            {
+                _FailedOperations.Add($"[{gitCommandName}] {repo.RepositoryName} - Unknown result");
+                WriteLine($"Unknown result calling '{gitCommandName}' for {repo.RepositoryName}.");
+            }
         }
     }
 
