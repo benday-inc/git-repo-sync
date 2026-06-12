@@ -14,14 +14,10 @@ namespace Benday.GitRepoSync.Api;
     IsAsync = false,
     Description = "Add or update a repo to the list of configured repositories. " +
     "NOTE: Repository URL is the unique identifier")]
-public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
-{
-    public AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider) : base(
-        info,
+public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider outputProvider)
+    : GitRepoConfigurationCommandBase(info,
         outputProvider)
-    {
-    }
-
+{
     public override ArgumentCollection GetArguments()
     {
         ArgumentCollection args = new ArgumentCollection();
@@ -136,7 +132,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         WriteToDisk(repos);
     }
 
-    private void PopulateNewRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
+    protected void PopulateNewRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
@@ -178,7 +174,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         return parentDirNameEscaped;
     }
 
-    private void UpdateExistingRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
+    protected void UpdateExistingRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
     {
         match.GitUrl = repositoryUrl;
 
@@ -201,7 +197,7 @@ public class AddUpdateRepoCommand : GitRepoConfigurationCommandBase
         match.ParentFolder = EscapeParentDirectory(parentDirectory);
     }
 
-    private void WriteToDisk(List<RepositoryInfo> repos) { WriteToDisk(repos, GetConfigFilename()); }
+    protected void WriteToDisk(List<RepositoryInfo> repos) { WriteToDisk(repos, GetConfigFilename()); }
 
     private void WriteToDisk(List<RepositoryInfo> repos, string filename)
     {
