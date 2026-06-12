@@ -72,30 +72,30 @@ public class AddUpdateQuickSyncRepoCommand(CommandExecutionInfo info, ITextOutpu
 
         WriteLine($"Repository URL: {repositoryUrl}");
 
-        List<RepositoryInfo> repos = GetRepositories();
+        var repos = GetRepositories();
 
-        RepositoryInfo? repo = repos
+        var repo = repos
             .FirstOrDefault(r => string.Equals(
                 r.GitUrl, repositoryUrl, StringComparison.CurrentCultureIgnoreCase));
 
         if (repo != null)
         {
             // modify existing
-            UpdateExistingRepositoryInfo(repo, repositoryUrl, parentDirectory);
-
+            UpdateExistingRepositoryInfo(repo, repositoryUrl, parentDirectory, true);
+            
             WriteLine("*** UPDATING REPOSITORY ***");
         }
         else
         {
             repo = new RepositoryInfo();
 
-            PopulateNewRepositoryInfo(repo, repositoryUrl, parentDirectory);
+            PopulateNewRepositoryInfo(repo, repositoryUrl, parentDirectory, true);
 
             repos.Add(repo);
 
             WriteLine("*** ADDING REPOSITORY ***");
         }
-
+        
         WriteRepositoryInfo(repo);
 
         WriteToDisk(repos);

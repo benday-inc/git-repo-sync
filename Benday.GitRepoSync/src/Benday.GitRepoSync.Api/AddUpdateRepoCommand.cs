@@ -132,7 +132,9 @@ public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider
         WriteToDisk(repos);
     }
 
-    protected void PopulateNewRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
+    protected void PopulateNewRepositoryInfo(
+        RepositoryInfo match, string repositoryUrl, string parentDirectory,
+        bool forceQuickSync = false)
     {
         match.GitUrl = repositoryUrl;
 
@@ -154,7 +156,14 @@ public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider
             match.Category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
         }
 
-        match.IsQuickSync = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
+        if (forceQuickSync == true)
+        {
+            match.IsQuickSync = true;
+        }
+        else
+        {
+            match.IsQuickSync = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
+        }
 
         match.ParentFolder = EscapeParentDirectory(parentDirectory);
     }
@@ -174,7 +183,9 @@ public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider
         return parentDirNameEscaped;
     }
 
-    protected void UpdateExistingRepositoryInfo(RepositoryInfo match, string repositoryUrl, string parentDirectory)
+    protected void UpdateExistingRepositoryInfo(
+        RepositoryInfo match, string repositoryUrl, string parentDirectory,
+        bool forceQuickSync = false)
     {
         match.GitUrl = repositoryUrl;
 
@@ -189,7 +200,11 @@ public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider
             match.Category = Arguments.GetStringValue(Constants.ArgumentNameCategory);
         }
 
-        if (Arguments.HasValue(Constants.ArgumentNameQuickSync) == true)
+        if (forceQuickSync == true)
+        {
+            match.IsQuickSync = true;
+        }
+        else if (Arguments.HasValue(Constants.ArgumentNameQuickSync) == true)
         {
             match.IsQuickSync = Arguments.GetBooleanValue(Constants.ArgumentNameQuickSync);
         }
@@ -197,7 +212,10 @@ public class AddUpdateRepoCommand(CommandExecutionInfo info, ITextOutputProvider
         match.ParentFolder = EscapeParentDirectory(parentDirectory);
     }
 
-    protected void WriteToDisk(List<RepositoryInfo> repos) { WriteToDisk(repos, GetConfigFilename()); }
+    protected void WriteToDisk(List<RepositoryInfo> repos)
+    {
+        WriteToDisk(repos, GetConfigFilename());
+    }
 
     private void WriteToDisk(List<RepositoryInfo> repos, string filename)
     {
